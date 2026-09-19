@@ -5,24 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <meta name="description"
-          content="SlipSeend - Automação simples para tornar sua operação mais rápida, organizada e eficiente.">
+          content="SlipSeend - Automatize processos, reduza tarefas manuais e trabalhe com mais velocidade e organização.">
 
-    <title>SlipSeend | Vendas mais enquanto acompanha!.</title>
+    <title>SlipSeend | Vendas mais! Enquanto acompanha!</title>
 
     <style>
         :root {
-            --fundo: #090b0e;
-            --fundo-secundario: #0f1216;
-            --card: #13171c;
-            --borda: #272d35;
+            --fundo: #08090b;
+            --fundo-secundario: #0e1013;
+            --card: #13161a;
+            --borda: #292d33;
 
             --texto: #ffffff;
-            --texto-secundario: #a8b0ba;
+            --texto-secundario: #a8afb8;
 
-            --destaque: #ffffff;
-            --destaque-texto: #0a0c0f;
-
-            --verde: #25d366;
+            --vermelho: #e50914;
+            --vermelho-hover: #ff1f2d;
+            --vermelho-escuro: #9f0710;
         }
 
         * {
@@ -53,10 +52,6 @@
             color: inherit;
         }
 
-        /* =========================================================
-           CONTAINER
-        ========================================================= */
-
         .container {
             width: min(1180px, 90%);
             margin: 0 auto;
@@ -71,7 +66,7 @@
             top: 0;
             z-index: 100;
 
-            background: rgba(9, 11, 14, 0.92);
+            background: rgba(8, 9, 11, 0.92);
             backdrop-filter: blur(16px);
 
             border-bottom: 1px solid rgba(255,255,255,0.07);
@@ -85,7 +80,41 @@
             justify-content: space-between;
         }
 
-        .logo {
+        .marca {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+
+            text-decoration: none;
+        }
+
+        .logo-icone {
+            width: 38px;
+            height: 38px;
+
+            border-radius: 10px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff2836,
+                    #b6000c
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow:
+                0 0 30px rgba(229, 9, 20, 0.18);
+        }
+
+        .logo-icone svg {
+            width: 23px;
+            height: 23px;
+        }
+
+        .logo-texto {
             font-size: 25px;
             font-weight: 800;
             letter-spacing: -0.8px;
@@ -110,13 +139,17 @@
         }
 
         .nav-download {
-            color: #090b0e !important;
-            background: #ffffff;
+            color: #ffffff !important;
+            background: var(--vermelho);
 
-            padding: 10px 17px;
+            padding: 10px 18px;
             border-radius: 9px;
 
             font-weight: 700;
+        }
+
+        .nav-download:hover {
+            background: var(--vermelho-hover);
         }
 
         /* =========================================================
@@ -124,29 +157,62 @@
         ========================================================= */
 
         .hero {
+            position: relative;
+
             min-height: 720px;
 
             display: flex;
             align-items: center;
 
-            padding: 100px 0;
+            padding: 105px 0;
+
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+
+            position: absolute;
+
+            width: 600px;
+            height: 600px;
+
+            right: -150px;
+            top: 50%;
+
+            transform: translateY(-50%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(229, 9, 20, 0.18),
+                    rgba(229, 9, 20, 0.04) 45%,
+                    transparent 70%
+                );
+
+            pointer-events: none;
         }
 
         .hero-conteudo {
-            max-width: 900px;
+            position: relative;
+            z-index: 1;
+
+            max-width: 950px;
         }
 
         .badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 9px;
 
-            padding: 8px 13px;
+            padding: 8px 14px;
 
-            border: 1px solid var(--borda);
+            border: 1px solid #3a2528;
             border-radius: 999px;
 
-            color: #c5cbd2;
+            background: rgba(229, 9, 20, 0.06);
+
+            color: #d5c7c9;
             font-size: 14px;
 
             margin-bottom: 28px;
@@ -157,7 +223,11 @@
             height: 8px;
 
             border-radius: 50%;
-            background: var(--verde);
+
+            background: var(--vermelho);
+
+            box-shadow:
+                0 0 10px rgba(229,9,20,0.8);
         }
 
         .hero h1 {
@@ -168,6 +238,10 @@
             max-width: 950px;
 
             margin-bottom: 30px;
+        }
+
+        .hero h1 span {
+            color: var(--vermelho);
         }
 
         .hero-descricao {
@@ -194,7 +268,7 @@
 
             min-height: 54px;
 
-            padding: 0 24px;
+            padding: 0 25px;
 
             border-radius: 10px;
 
@@ -203,7 +277,8 @@
 
             transition:
                 transform 0.2s,
-                opacity 0.2s;
+                background 0.2s,
+                border-color 0.2s;
         }
 
         .botao:hover {
@@ -211,19 +286,30 @@
         }
 
         .botao-principal {
-            background: var(--destaque);
-            color: var(--destaque-texto);
+            background: var(--vermelho);
+            color: #ffffff;
+
+            box-shadow:
+                0 10px 35px rgba(229, 9, 20, 0.20);
+        }
+
+        .botao-principal:hover {
+            background: var(--vermelho-hover);
         }
 
         .botao-secundario {
-            border: 1px solid #353c45;
+            border: 1px solid #353b43;
             color: #ffffff;
+        }
+
+        .botao-secundario:hover {
+            border-color: #5a6068;
         }
 
         .hero-detalhe {
             margin-top: 25px;
 
-            color: #727b85;
+            color: #727983;
             font-size: 14px;
         }
 
@@ -244,10 +330,10 @@
         }
 
         .secao-legenda {
-            color: #8e97a2;
+            color: var(--vermelho);
 
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
 
             text-transform: uppercase;
             letter-spacing: 1.5px;
@@ -290,6 +376,15 @@
             border-radius: 16px;
 
             padding: 30px;
+
+            transition:
+                transform 0.2s,
+                border-color 0.2s;
+        }
+
+        .card:hover {
+            transform: translateY(-4px);
+            border-color: #583036;
         }
 
         .numero {
@@ -300,8 +395,8 @@
             width: 42px;
             height: 42px;
 
-            background: #ffffff;
-            color: #080a0c;
+            background: var(--vermelho);
+            color: #ffffff;
 
             border-radius: 10px;
 
@@ -343,9 +438,9 @@
         }
 
         .passo-numero {
-            color: #737c86;
+            color: var(--vermelho);
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
 
             margin-bottom: 35px;
         }
@@ -382,17 +477,50 @@
             background:
                 radial-gradient(
                     circle at center,
-                    #252c34 0,
-                    #12161a 45%,
-                    #0c0f12 100%
+                    rgba(229,9,20,0.18) 0,
+                    #16171b 42%,
+                    #0c0e11 100%
                 );
 
-            border: 1px solid var(--borda);
+            border: 1px solid #3e2529;
             border-radius: 24px;
         }
 
+        .produto-marca {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .produto-icone {
+            width: 90px;
+            height: 90px;
+
+            border-radius: 24px;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff2836,
+                    #a6000b
+                );
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            box-shadow:
+                0 20px 60px rgba(229,9,20,0.25);
+        }
+
+        .produto-icone svg {
+            width: 55px;
+            height: 55px;
+        }
+
         .produto-logo {
-            font-size: clamp(45px, 7vw, 80px);
+            font-size: clamp(40px, 6vw, 70px);
             font-weight: 900;
             letter-spacing: -4px;
         }
@@ -418,8 +546,10 @@
 
         .check::before {
             content: "✓";
+
             margin-right: 12px;
-            color: var(--verde);
+
+            color: var(--vermelho);
             font-weight: 900;
         }
 
@@ -432,7 +562,13 @@
         }
 
         .plano {
-            background: #ffffff;
+            background:
+                linear-gradient(
+                    145deg,
+                    #ffffff,
+                    #f4f4f4
+                );
+
             color: #0b0d10;
 
             border-radius: 22px;
@@ -442,10 +578,10 @@
         }
 
         .plano-tag {
-            color: #62676d;
+            color: var(--vermelho);
 
             font-size: 14px;
-            font-weight: 700;
+            font-weight: 800;
 
             margin-bottom: 12px;
         }
@@ -464,7 +600,7 @@
             padding: 14px 16px;
 
             border-radius: 9px;
-            background: #f0f1f3;
+            background: #ededee;
 
             margin-bottom: 25px;
         }
@@ -472,7 +608,7 @@
         .plano .botao {
             width: 100%;
 
-            background: #0b0d10;
+            background: var(--vermelho);
             color: #ffffff;
         }
 
@@ -494,8 +630,22 @@
             list-style: none;
         }
 
+        summary::after {
+            content: "+";
+
+            float: right;
+
+            color: var(--vermelho);
+            font-size: 24px;
+        }
+
+        details[open] summary::after {
+            content: "−";
+        }
+
         details p {
             color: var(--texto-secundario);
+
             max-width: 800px;
 
             margin-top: 16px;
@@ -508,6 +658,37 @@
         .cta-final {
             text-align: center;
             padding: 130px 0;
+
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-final::before {
+            content: "";
+
+            position: absolute;
+
+            width: 500px;
+            height: 500px;
+
+            left: 50%;
+            top: 50%;
+
+            transform:
+                translate(-50%, -50%);
+
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(229,9,20,0.15),
+                    transparent 65%
+                );
+
+            pointer-events: none;
+        }
+
+        .cta-final .container {
+            position: relative;
         }
 
         .cta-final h2 {
@@ -515,7 +696,12 @@
             line-height: 1;
 
             max-width: 850px;
+
             margin: 0 auto 25px;
+        }
+
+        .cta-final h2 span {
+            color: var(--vermelho);
         }
 
         .cta-final p {
@@ -524,6 +710,7 @@
             font-size: 19px;
 
             max-width: 620px;
+
             margin: 0 auto 35px;
         }
 
@@ -610,8 +797,12 @@
                 height: 68px;
             }
 
+            .logo-texto {
+                font-size: 21px;
+            }
+
             .hero h1 {
-                font-size: 52px;
+                font-size: 50px;
             }
 
             section {
@@ -638,21 +829,47 @@
     </style>
 </head>
 
-
 <body>
-
-
-<!-- =========================================================
-     HEADER
-========================================================= -->
 
 <header>
 
     <div class="container header-conteudo">
 
-        <div class="logo">
-            SlipSeend
-        </div>
+        <a class="marca" href="/">
+
+            <div class="logo-icone">
+
+                <svg
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    xmlns="http://www.w3.org/2000/svg"
+                >
+
+                    <path
+                        d="M17.5 6.5H8.5C6.84 6.5 5.5 7.84 5.5 9.5C5.5 11.16 6.84 12.5 8.5 12.5H15.5C17.16 12.5 18.5 13.84 18.5 15.5C18.5 17.16 17.16 18.5 15.5 18.5H6.5"
+                        stroke="white"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                    />
+
+                    <path
+                        d="M14.5 3.5L18 6.5L14.5 9.5"
+                        stroke="white"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                    />
+
+                </svg>
+
+            </div>
+
+            <div class="logo-texto">
+                SlipSeend
+            </div>
+
+        </a>
+
 
         <nav>
 
@@ -679,545 +896,35 @@
 </header>
 
 
-<!-- =========================================================
-     HERO
-========================================================= -->
-
 <main>
 
-    <section class="hero">
 
-        <div class="container">
+<section class="hero">
 
-            <div class="hero-conteudo">
+    <div class="container">
 
-                <div class="badge">
+        <div class="hero-conteudo">
 
-                    <span class="badge-ponto"></span>
+            <div class="badge">
 
-                    SlipSeend para Windows
+                <span class="badge-ponto"></span>
 
-                </div>
-
-
-                <h1>
-                    Menos trabalho manual.<br>
-                    Mais resultado.
-                </h1>
-
-
-                <p class="hero-descricao">
-
-                    O SlipSeend automatiza processos repetitivos,
-                    organiza sua operação e ajuda você a trabalhar
-                    de forma mais rápida, simples e eficiente.
-
-                </p>
-
-
-                <div class="acoes">
-
-                    <a
-                        class="botao botao-principal"
-                        href="/download"
-                    >
-                        Baixar SlipSeend
-                    </a>
-
-
-                    <a
-                        class="botao botao-secundario"
-                        href="#como-funciona"
-                    >
-                        Ver como funciona
-                    </a>
-
-                </div>
-
-
-                <div class="hero-detalhe">
-                    Disponível para Windows • Ativação por licença
-                </div>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         BENEFÍCIOS
-    ====================================================== -->
-
-    <section
-        id="beneficios"
-        class="secao-cinza"
-    >
-
-        <div class="container">
-
-            <div class="secao-topo">
-
-                <div class="secao-legenda">
-                    Por que usar
-                </div>
-
-                <h2 class="secao-titulo">
-                    Feito para simplificar sua rotina.
-                </h2>
-
-                <p class="secao-texto">
-
-                    Automatize tarefas repetitivas e mantenha
-                    seu trabalho organizado em um único fluxo.
-
-                </p>
+                SlipSeend para Windows
 
             </div>
 
 
-            <div class="grid-beneficios">
+            <h1>
+                Menos trabalho manual.<br>
+                <span>Mais resultado.</span>
+            </h1>
 
 
-                <div class="card">
+            <p class="hero-descricao">
 
-                    <div class="numero">
-                        01
-                    </div>
-
-                    <h3>
-                        Mais velocidade
-                    </h3>
-
-                    <p>
-
-                        Reduza etapas manuais e execute
-                        processos com mais agilidade.
-
-                    </p>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="numero">
-                        02
-                    </div>
-
-                    <h3>
-                        Mais organização
-                    </h3>
-
-                    <p>
-
-                        Centralize sua operação e tenha mais
-                        controle sobre o que já foi processado.
-
-                    </p>
-
-                </div>
-
-
-                <div class="card">
-
-                    <div class="numero">
-                        03
-                    </div>
-
-                    <h3>
-                        Menos trabalho repetitivo
-                    </h3>
-
-                    <p>
-
-                        Deixe o SlipSeend cuidar das etapas
-                        repetitivas enquanto você foca no que importa.
-
-                    </p>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         COMO FUNCIONA
-    ====================================================== -->
-
-    <section id="como-funciona">
-
-        <div class="container">
-
-            <div class="secao-topo">
-
-                <div class="secao-legenda">
-                    Comece rápido
-                </div>
-
-                <h2 class="secao-titulo">
-                    Do pagamento à ativação em poucos passos.
-                </h2>
-
-            </div>
-
-
-            <div class="passos">
-
-
-                <div class="passo">
-
-                    <div class="passo-numero">
-                        PASSO 01
-                    </div>
-
-                    <h3>
-                        Adquira sua licença
-                    </h3>
-
-                    <p>
-                        Faça sua compra pelo canal oficial
-                        do SlipSeend.
-                    </p>
-
-                </div>
-
-
-                <div class="passo">
-
-                    <div class="passo-numero">
-                        PASSO 02
-                    </div>
-
-                    <h3>
-                        Receba sua chave
-                    </h3>
-
-                    <p>
-                        Após a confirmação, sua chave é
-                        enviada automaticamente por e-mail.
-                    </p>
-
-                </div>
-
-
-                <div class="passo">
-
-                    <div class="passo-numero">
-                        PASSO 03
-                    </div>
-
-                    <h3>
-                        Instale o SlipSeend
-                    </h3>
-
-                    <p>
-                        Baixe o instalador oficial diretamente
-                        pelo nosso site.
-                    </p>
-
-                </div>
-
-
-                <div class="passo">
-
-                    <div class="passo-numero">
-                        PASSO 04
-                    </div>
-
-                    <h3>
-                        Ative e use
-                    </h3>
-
-                    <p>
-                        Informe sua chave no aplicativo
-                        e comece a utilizar o SlipSeend.
-                    </p>
-
-                </div>
-
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         PRODUTO
-    ====================================================== -->
-
-    <section class="secao-cinza">
-
-        <div class="container produto">
-
-
-            <div class="produto-caixa">
-
-                <div class="produto-logo">
-                    SlipSeend
-                </div>
-
-            </div>
-
-
-            <div class="produto-texto">
-
-                <div class="secao-legenda">
-                    SlipSeend
-                </div>
-
-                <h2>
-                    Um sistema feito para trabalhar com você.
-                </h2>
-
-                <p>
-
-                    O SlipSeend foi desenvolvido para transformar
-                    processos demorados em um fluxo mais simples
-                    e organizado.
-
-                </p>
-
-
-                <div class="check">
-                    Aplicativo para Windows
-                </div>
-
-                <div class="check">
-                    Licenciamento online
-                </div>
-
-                <div class="check">
-                    Ativação segura
-                </div>
-
-                <div class="check">
-                    Download oficial pelo site
-                </div>
-
-                <div class="check">
-                    Suporte por e-mail
-                </div>
-
-
-                <div
-                    class="acoes"
-                    style="margin-top: 30px;"
-                >
-
-                    <a
-                        href="/download"
-                        class="botao botao-principal"
-                    >
-                        Baixar agora
-                    </a>
-
-                </div>
-
-            </div>
-
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         PLANO
-    ====================================================== -->
-
-    <section id="planos">
-
-        <div class="container plano-container">
-
-            <div class="secao-legenda">
-                Licença
-            </div>
-
-            <h2 class="secao-titulo">
-                Comece com o SlipSeend.
-            </h2>
-
-            <p class="secao-texto">
-
-                A contratação online estará disponível
-                diretamente pelo site em breve.
-
-            </p>
-
-
-            <div class="plano">
-
-                <div class="plano-tag">
-                    LICENÇA SLIPSEEND
-                </div>
-
-                <h3>
-                    Plano mensal
-                </h3>
-
-                <p class="plano-descricao">
-                    Acesso ao SlipSeend com licença de uso individual.
-                </p>
-
-
-                <div class="plano-status">
-                    Checkout online em preparação.
-                </div>
-
-
-                <a
-                    class="botao"
-                    href="mailto:contato@slipseend.com.br"
-                >
-                    Falar com a equipe SlipSeend
-                </a>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         FAQ
-    ====================================================== -->
-
-    <section
-        id="faq"
-        class="secao-cinza"
-    >
-
-        <div class="container">
-
-            <div class="secao-topo">
-
-                <div class="secao-legenda">
-                    Dúvidas
-                </div>
-
-                <h2 class="secao-titulo">
-                    Perguntas frequentes.
-                </h2>
-
-            </div>
-
-
-            <details>
-
-                <summary>
-                    Como recebo minha licença?
-                </summary>
-
-                <p>
-
-                    Após a confirmação do pagamento,
-                    sua chave de ativação é enviada
-                    automaticamente para o e-mail informado
-                    na compra.
-
-                </p>
-
-            </details>
-
-
-            <details>
-
-                <summary>
-                    Onde faço o download?
-                </summary>
-
-                <p>
-
-                    O instalador oficial está disponível na
-                    página de download do SlipSeend.
-
-                </p>
-
-            </details>
-
-
-            <details>
-
-                <summary>
-                    Posso instalar em qualquer computador?
-                </summary>
-
-                <p>
-
-                    A licença é vinculada ao computador
-                    utilizado na ativação. Em casos de troca
-                    de equipamento, entre em contato com
-                    nosso suporte.
-
-                </p>
-
-            </details>
-
-
-            <details>
-
-                <summary>
-                    O SlipSeend funciona sem internet?
-                </summary>
-
-                <p>
-
-                    A validação da licença utiliza conexão
-                    com nosso servidor, portanto o acesso
-                    à internet é necessário para a validação.
-
-                </p>
-
-            </details>
-
-
-            <details>
-
-                <summary>
-                    Preciso guardar minha chave?
-                </summary>
-
-                <p>
-
-                    Sim. Guarde o e-mail recebido após
-                    sua compra, pois ele contém sua chave
-                    de ativação.
-
-                </p>
-
-            </details>
-
-        </div>
-
-    </section>
-
-
-    <!-- =====================================================
-         CTA FINAL
-    ====================================================== -->
-
-    <section class="cta-final">
-
-        <div class="container">
-
-            <h2>
-                Automatize. Organize. Ganhe tempo.
-            </h2>
-
-            <p>
-
-                Experimente uma forma mais simples
-                de trabalhar com o SlipSeend.
+                O SlipSeend automatiza processos repetitivos,
+                organiza sua operação e ajuda você a trabalhar
+                de forma mais rápida, simples e eficiente.
 
             </p>
 
@@ -1225,32 +932,518 @@
             <div class="acoes">
 
                 <a
-                    href="/download"
                     class="botao botao-principal"
+                    href="/download"
                 >
                     Baixar SlipSeend
                 </a>
 
+
                 <a
-                    href="mailto:contato@slipseend.com.br"
                     class="botao botao-secundario"
+                    href="#como-funciona"
                 >
-                    Falar com suporte
+                    Ver como funciona
+                </a>
+
+            </div>
+
+
+            <div class="hero-detalhe">
+                Disponível para Windows • Ativação por licença
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    id="beneficios"
+    class="secao-cinza"
+>
+
+    <div class="container">
+
+        <div class="secao-topo">
+
+            <div class="secao-legenda">
+                Por que usar
+            </div>
+
+            <h2 class="secao-titulo">
+                Feito para simplificar sua rotina.
+            </h2>
+
+            <p class="secao-texto">
+
+                Automatize tarefas repetitivas,
+                reduza etapas manuais e mantenha
+                sua operação organizada.
+
+            </p>
+
+        </div>
+
+
+        <div class="grid-beneficios">
+
+            <div class="card">
+
+                <div class="numero">
+                    01
+                </div>
+
+                <h3>
+                    Mais velocidade
+                </h3>
+
+                <p>
+                    Execute processos com mais agilidade
+                    e reduza o tempo gasto em tarefas repetitivas.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="numero">
+                    02
+                </div>
+
+                <h3>
+                    Mais organização
+                </h3>
+
+                <p>
+                    Tenha mais controle sobre sua operação
+                    e acompanhe o que já foi processado.
+                </p>
+
+            </div>
+
+
+            <div class="card">
+
+                <div class="numero">
+                    03
+                </div>
+
+                <h3>
+                    Menos trabalho manual
+                </h3>
+
+                <p>
+                    Deixe o SlipSeend cuidar das etapas
+                    repetitivas enquanto você foca no resultado.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section id="como-funciona">
+
+    <div class="container">
+
+        <div class="secao-topo">
+
+            <div class="secao-legenda">
+                Comece rápido
+            </div>
+
+            <h2 class="secao-titulo">
+                Do pagamento à ativação em poucos passos.
+            </h2>
+
+        </div>
+
+
+        <div class="passos">
+
+            <div class="passo">
+
+                <div class="passo-numero">
+                    PASSO 01
+                </div>
+
+                <h3>
+                    Adquira sua licença
+                </h3>
+
+                <p>
+                    Faça sua compra pelo canal oficial
+                    do SlipSeend.
+                </p>
+
+            </div>
+
+
+            <div class="passo">
+
+                <div class="passo-numero">
+                    PASSO 02
+                </div>
+
+                <h3>
+                    Receba sua chave
+                </h3>
+
+                <p>
+                    Após o pagamento, sua chave é
+                    enviada automaticamente por e-mail.
+                </p>
+
+            </div>
+
+
+            <div class="passo">
+
+                <div class="passo-numero">
+                    PASSO 03
+                </div>
+
+                <h3>
+                    Baixe o aplicativo
+                </h3>
+
+                <p>
+                    Faça o download da versão oficial
+                    diretamente pelo site.
+                </p>
+
+            </div>
+
+
+            <div class="passo">
+
+                <div class="passo-numero">
+                    PASSO 04
+                </div>
+
+                <h3>
+                    Ative e use
+                </h3>
+
+                <p>
+                    Informe sua chave de licença
+                    e comece a utilizar o SlipSeend.
+                </p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section class="secao-cinza">
+
+    <div class="container produto">
+
+
+        <div class="produto-caixa">
+
+            <div class="produto-marca">
+
+                <div class="produto-icone">
+
+                    <svg
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                    >
+
+                        <path
+                            d="M17.5 6.5H8.5C6.84 6.5 5.5 7.84 5.5 9.5C5.5 11.16 6.84 12.5 8.5 12.5H15.5C17.16 12.5 18.5 13.84 18.5 15.5C18.5 17.16 17.16 18.5 15.5 18.5H6.5"
+                            stroke="white"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                        />
+
+                        <path
+                            d="M14.5 3.5L18 6.5L14.5 9.5"
+                            stroke="white"
+                            stroke-width="2.2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        />
+
+                    </svg>
+
+                </div>
+
+                <div class="produto-logo">
+                    SlipSeend
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="produto-texto">
+
+            <div class="secao-legenda">
+                SlipSeend
+            </div>
+
+            <h2>
+                Um sistema feito para trabalhar com você.
+            </h2>
+
+            <p>
+
+                O SlipSeend transforma processos demorados
+                em um fluxo mais simples, rápido e organizado.
+
+            </p>
+
+
+            <div class="check">
+                Aplicativo para Windows
+            </div>
+
+            <div class="check">
+                Licenciamento online
+            </div>
+
+            <div class="check">
+                Ativação segura
+            </div>
+
+            <div class="check">
+                Download oficial
+            </div>
+
+            <div class="check">
+                Suporte especializado
+            </div>
+
+
+            <div
+                class="acoes"
+                style="margin-top:30px;"
+            >
+
+                <a
+                    href="/download"
+                    class="botao botao-principal"
+                >
+                    Baixar agora
                 </a>
 
             </div>
 
         </div>
 
-    </section>
+    </div>
+
+</section>
+
+
+<section id="planos">
+
+    <div class="container plano-container">
+
+        <div class="secao-legenda">
+            Licença
+        </div>
+
+        <h2 class="secao-titulo">
+            Comece com o SlipSeend.
+        </h2>
+
+        <p class="secao-texto">
+
+            Em breve você poderá contratar sua licença
+            diretamente pelo site.
+
+        </p>
+
+
+        <div class="plano">
+
+            <div class="plano-tag">
+                SLIPSEEND
+            </div>
+
+            <h3>
+                Plano mensal
+            </h3>
+
+            <p class="plano-descricao">
+                Licença individual com acesso ao SlipSeend.
+            </p>
+
+
+            <div class="plano-status">
+                Checkout online em preparação.
+            </div>
+
+
+            <a
+                class="botao"
+                href="mailto:contato@slipseend.com.br"
+            >
+                Falar com a equipe
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<section
+    id="faq"
+    class="secao-cinza"
+>
+
+    <div class="container">
+
+        <div class="secao-topo">
+
+            <div class="secao-legenda">
+                Dúvidas
+            </div>
+
+            <h2 class="secao-titulo">
+                Perguntas frequentes.
+            </h2>
+
+        </div>
+
+
+        <details>
+
+            <summary>
+                Como recebo minha licença?
+            </summary>
+
+            <p>
+                Após a confirmação do pagamento,
+                sua chave de ativação é enviada
+                automaticamente para seu e-mail.
+            </p>
+
+        </details>
+
+
+        <details>
+
+            <summary>
+                Onde faço o download?
+            </summary>
+
+            <p>
+                Utilize somente a página oficial
+                de download do SlipSeend.
+            </p>
+
+        </details>
+
+
+        <details>
+
+            <summary>
+                Posso instalar em qualquer computador?
+            </summary>
+
+            <p>
+                A licença é vinculada ao computador
+                utilizado na ativação. Caso precise trocar
+                de equipamento, fale com nosso suporte.
+            </p>
+
+        </details>
+
+
+        <details>
+
+            <summary>
+                Preciso de internet?
+            </summary>
+
+            <p>
+                A validação da licença utiliza nosso
+                servidor online e requer conexão com a internet.
+            </p>
+
+        </details>
+
+
+        <details>
+
+            <summary>
+                Preciso guardar minha chave?
+            </summary>
+
+            <p>
+                Sim. Guarde o e-mail recebido após
+                sua compra, pois nele está sua chave.
+            </p>
+
+        </details>
+
+    </div>
+
+</section>
+
+
+<section class="cta-final">
+
+    <div class="container">
+
+        <h2>
+            Automatize. Organize.<br>
+            <span>Ganhe tempo.</span>
+        </h2>
+
+        <p>
+
+            Trabalhe de forma mais simples
+            com o SlipSeend.
+
+        </p>
+
+
+        <div class="acoes">
+
+            <a
+                href="/download"
+                class="botao botao-principal"
+            >
+                Baixar SlipSeend
+            </a>
+
+            <a
+                href="mailto:contato@slipseend.com.br"
+                class="botao botao-secundario"
+            >
+                Falar com suporte
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
 
 
 </main>
 
-
-<!-- =========================================================
-     FOOTER
-========================================================= -->
 
 <footer>
 
