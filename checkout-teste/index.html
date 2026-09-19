@@ -1,0 +1,615 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Checkout SlipSeend</title>
+
+    <style>
+
+        :root {
+            --fundo: #08090b;
+            --card: #111318;
+            --borda: #292d33;
+
+            --texto: #ffffff;
+            --texto-secundario: #9da5af;
+
+            --vermelho: #e50914;
+            --vermelho-hover: #ff1f2d;
+        }
+
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        body {
+
+            min-height: 100vh;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            padding: 30px;
+
+            background: var(--fundo);
+
+            color: var(--texto);
+
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+        }
+
+
+        .checkout {
+
+            width: 100%;
+            max-width: 520px;
+
+            background: var(--card);
+
+            border: 1px solid var(--borda);
+
+            border-radius: 22px;
+
+            padding: 38px;
+        }
+
+
+        .marca {
+
+            display: flex;
+            align-items: center;
+
+            gap: 11px;
+
+            margin-bottom: 35px;
+        }
+
+
+        .icone {
+
+            width: 40px;
+            height: 40px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #ff2836,
+                    #a9000b
+                );
+
+            border-radius: 11px;
+
+            font-weight: 900;
+        }
+
+
+        .logo {
+
+            font-size: 25px;
+            font-weight: 800;
+
+            letter-spacing: -1px;
+        }
+
+
+        .teste {
+
+            display: inline-block;
+
+            padding: 6px 10px;
+
+            margin-bottom: 18px;
+
+            border-radius: 999px;
+
+            background: rgba(229, 9, 20, 0.1);
+
+            color: #ff5962;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            text-transform: uppercase;
+        }
+
+
+        h1 {
+
+            font-size: 38px;
+            line-height: 1.05;
+
+            letter-spacing: -1.5px;
+
+            margin-bottom: 14px;
+        }
+
+
+        .descricao {
+
+            color: var(--texto-secundario);
+
+            margin-bottom: 30px;
+        }
+
+
+        .campo {
+
+            margin-bottom: 18px;
+        }
+
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+
+        input {
+
+            width: 100%;
+
+            height: 52px;
+
+            padding: 0 15px;
+
+            border: 1px solid var(--borda);
+            border-radius: 10px;
+
+            background: #090b0e;
+
+            color: #ffffff;
+
+            font-size: 16px;
+
+            outline: none;
+        }
+
+
+        input:focus {
+
+            border-color: var(--vermelho);
+        }
+
+
+        button {
+
+            width: 100%;
+
+            height: 56px;
+
+            margin-top: 10px;
+
+            border: 0;
+            border-radius: 10px;
+
+            background: var(--vermelho);
+
+            color: #ffffff;
+
+            font-size: 16px;
+            font-weight: 800;
+
+            cursor: pointer;
+
+            transition: 0.2s;
+        }
+
+
+        button:hover {
+
+            background: var(--vermelho-hover);
+        }
+
+
+        button:disabled {
+
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+
+        .mensagem {
+
+            display: none;
+
+            margin-top: 18px;
+
+            padding: 14px;
+
+            border-radius: 10px;
+
+            font-size: 14px;
+        }
+
+
+        .mensagem.erro {
+
+            display: block;
+
+            background: rgba(229,9,20,0.10);
+
+            color: #ff777f;
+        }
+
+
+        .mensagem.sucesso {
+
+            display: block;
+
+            background: rgba(34,197,94,0.10);
+
+            color: #6de691;
+        }
+
+
+        .seguranca {
+
+            margin-top: 25px;
+
+            color: #737c86;
+
+            font-size: 13px;
+
+            text-align: center;
+        }
+
+
+        .voltar {
+
+            display: block;
+
+            margin-top: 25px;
+
+            color: #969ea8;
+
+            font-size: 14px;
+
+            text-align: center;
+
+            text-decoration: none;
+        }
+
+
+        .voltar:hover {
+
+            color: #ffffff;
+        }
+
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 15px;
+            }
+
+            .checkout {
+                padding: 27px;
+            }
+
+            h1 {
+                font-size: 32px;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="checkout">
+
+
+    <div class="marca">
+
+        <div class="icone">
+            S
+        </div>
+
+        <div class="logo">
+            SlipSeend
+        </div>
+
+    </div>
+
+
+    <div class="teste">
+        Ambiente de teste
+    </div>
+
+
+    <h1>
+        Adquira sua licença.
+    </h1>
+
+
+    <p class="descricao">
+
+        Preencha seus dados para gerar
+        a cobrança do SlipSeend.
+
+    </p>
+
+
+    <form id="formCheckout">
+
+
+        <div class="campo">
+
+            <label for="nome">
+                Nome completo
+            </label>
+
+            <input
+                id="nome"
+                type="text"
+                autocomplete="name"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label for="cpfCnpj">
+                CPF ou CNPJ
+            </label>
+
+            <input
+                id="cpfCnpj"
+                type="text"
+                inputmode="numeric"
+                required
+            >
+
+        </div>
+
+
+        <div class="campo">
+
+            <label for="email">
+                E-mail
+            </label>
+
+            <input
+                id="email"
+                type="email"
+                autocomplete="email"
+                required
+            >
+
+        </div>
+
+
+        <button
+            id="botaoComprar"
+            type="submit"
+        >
+            Continuar para pagamento
+        </button>
+
+
+        <div
+            id="mensagem"
+            class="mensagem"
+        ></div>
+
+
+    </form>
+
+
+    <div class="seguranca">
+
+        Sua licença será enviada por e-mail
+        somente após a confirmação do pagamento.
+
+    </div>
+
+
+    <a
+        class="voltar"
+        href="/"
+    >
+        ← Voltar para SlipSeend
+    </a>
+
+
+</div>
+
+
+<script>
+
+    const form =
+        document.getElementById(
+            "formCheckout"
+        );
+
+
+    const botao =
+        document.getElementById(
+            "botaoComprar"
+        );
+
+
+    const mensagem =
+        document.getElementById(
+            "mensagem"
+        );
+
+
+    const URL_CHECKOUT =
+        "https://servidorboletosautomacao-production.up.railway.app/api/checkout/criar";
+
+
+    form.addEventListener(
+        "submit",
+        async function (evento) {
+
+            evento.preventDefault();
+
+
+            mensagem.className =
+                "mensagem";
+
+            mensagem.textContent =
+                "";
+
+
+            const nome =
+                document
+                    .getElementById(
+                        "nome"
+                    )
+                    .value
+                    .trim();
+
+
+            const cpfCnpj =
+                document
+                    .getElementById(
+                        "cpfCnpj"
+                    )
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById(
+                        "email"
+                    )
+                    .value
+                    .trim();
+
+
+            botao.disabled =
+                true;
+
+            botao.textContent =
+                "Gerando pagamento...";
+
+
+            try {
+
+                const resposta =
+                    await fetch(
+                        URL_CHECKOUT,
+                        {
+
+                            method: "POST",
+
+                            headers: {
+
+                                "Content-Type":
+                                    "application/json"
+
+                            },
+
+                            body:
+                                JSON.stringify(
+                                    {
+                                        nome: nome,
+                                        cpfCnpj: cpfCnpj,
+                                        email: email
+                                    }
+                                )
+                        }
+                    );
+
+
+                const dados =
+                    await resposta.json();
+
+
+                if (!resposta.ok
+                        || !dados.ok) {
+
+                    throw new Error(
+                        dados.mensagem
+                            || "Não foi possível gerar o pagamento."
+                    );
+                }
+
+
+                if (!dados.invoiceUrl) {
+
+                    throw new Error(
+                        "O servidor não retornou o link de pagamento."
+                    );
+                }
+
+
+                mensagem.className =
+                    "mensagem sucesso";
+
+                mensagem.textContent =
+                    "Pagamento criado. Redirecionando...";
+
+
+                setTimeout(
+                    function () {
+
+                        window.location.href =
+                            dados.invoiceUrl;
+
+                    },
+                    800
+                );
+
+
+            } catch (erro) {
+
+                mensagem.className =
+                    "mensagem erro";
+
+                mensagem.textContent =
+                    erro.message
+                    || "Erro ao iniciar pagamento.";
+
+
+                botao.disabled =
+                    false;
+
+                botao.textContent =
+                    "Continuar para pagamento";
+            }
+        }
+    );
+
+</script>
+
+
+</body>
+
+</html>
