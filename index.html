@@ -4,151 +4,1279 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SlipSeend</title>
+    <meta name="description"
+          content="SlipSeend - Automação simples para tornar sua operação mais rápida, organizada e eficiente.">
+
+    <title>SlipSeend | Vendas mais enquanto acompanha!.</title>
 
     <style>
+        :root {
+            --fundo: #090b0e;
+            --fundo-secundario: #0f1216;
+            --card: #13171c;
+            --borda: #272d35;
+
+            --texto: #ffffff;
+            --texto-secundario: #a8b0ba;
+
+            --destaque: #ffffff;
+            --destaque-texto: #0a0c0f;
+
+            --verde: #25d366;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
-            font-family: Arial, Helvetica, sans-serif;
+            font-family:
+                Inter,
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
+
+            background: var(--fundo);
+            color: var(--texto);
+            line-height: 1.6;
+        }
+
+        a {
+            color: inherit;
+        }
+
+        /* =========================================================
+           CONTAINER
+        ========================================================= */
+
+        .container {
+            width: min(1180px, 90%);
+            margin: 0 auto;
+        }
+
+        /* =========================================================
+           HEADER
+        ========================================================= */
+
+        header {
+            position: sticky;
+            top: 0;
+            z-index: 100;
+
+            background: rgba(9, 11, 14, 0.92);
+            backdrop-filter: blur(16px);
+
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+        }
+
+        .header-conteudo {
+            height: 76px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .logo {
+            font-size: 25px;
+            font-weight: 800;
+            letter-spacing: -0.8px;
+        }
+
+        nav {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--texto-secundario);
+            text-decoration: none;
+            font-size: 15px;
+
+            transition: 0.2s;
+        }
+
+        nav a:hover {
+            color: #ffffff;
+        }
+
+        .nav-download {
+            color: #090b0e !important;
+            background: #ffffff;
+
+            padding: 10px 17px;
+            border-radius: 9px;
+
+            font-weight: 700;
+        }
+
+        /* =========================================================
+           HERO
+        ========================================================= */
+
+        .hero {
+            min-height: 720px;
+
+            display: flex;
+            align-items: center;
+
+            padding: 100px 0;
+        }
+
+        .hero-conteudo {
+            max-width: 900px;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+
+            padding: 8px 13px;
+
+            border: 1px solid var(--borda);
+            border-radius: 999px;
+
+            color: #c5cbd2;
+            font-size: 14px;
+
+            margin-bottom: 28px;
+        }
+
+        .badge-ponto {
+            width: 8px;
+            height: 8px;
+
+            border-radius: 50%;
+            background: var(--verde);
+        }
+
+        .hero h1 {
+            font-size: clamp(52px, 7.5vw, 96px);
+            line-height: 0.98;
+            letter-spacing: -4px;
+
+            max-width: 950px;
+
+            margin-bottom: 30px;
+        }
+
+        .hero-descricao {
+            color: var(--texto-secundario);
+
+            font-size: clamp(18px, 2vw, 22px);
+            line-height: 1.65;
+
+            max-width: 760px;
+
+            margin-bottom: 38px;
+        }
+
+        .acoes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 14px;
+        }
+
+        .botao {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+
+            min-height: 54px;
+
+            padding: 0 24px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+            font-weight: 700;
+
+            transition:
+                transform 0.2s,
+                opacity 0.2s;
+        }
+
+        .botao:hover {
+            transform: translateY(-2px);
+        }
+
+        .botao-principal {
+            background: var(--destaque);
+            color: var(--destaque-texto);
+        }
+
+        .botao-secundario {
+            border: 1px solid #353c45;
+            color: #ffffff;
+        }
+
+        .hero-detalhe {
+            margin-top: 25px;
+
+            color: #727b85;
+            font-size: 14px;
+        }
+
+        /* =========================================================
+           SEÇÕES
+        ========================================================= */
+
+        section {
+            padding: 110px 0;
+        }
+
+        .secao-cinza {
+            background: var(--fundo-secundario);
+        }
+
+        .secao-topo {
+            margin-bottom: 55px;
+        }
+
+        .secao-legenda {
+            color: #8e97a2;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+
+            margin-bottom: 14px;
+        }
+
+        .secao-titulo {
+            font-size: clamp(36px, 5vw, 58px);
+            line-height: 1.08;
+            letter-spacing: -2px;
+
+            max-width: 850px;
+        }
+
+        .secao-texto {
+            color: var(--texto-secundario);
+            font-size: 18px;
+
+            max-width: 720px;
+
+            margin-top: 20px;
+        }
+
+        /* =========================================================
+           BENEFÍCIOS
+        ========================================================= */
+
+        .grid-beneficios {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 18px;
+        }
+
+        .card {
+            background: var(--card);
+
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+
+            padding: 30px;
+        }
+
+        .numero {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            width: 42px;
+            height: 42px;
+
+            background: #ffffff;
+            color: #080a0c;
+
+            border-radius: 10px;
+
+            font-weight: 800;
+
+            margin-bottom: 25px;
+        }
+
+        .card h3 {
+            font-size: 21px;
+            margin-bottom: 12px;
+        }
+
+        .card p {
+            color: var(--texto-secundario);
+        }
+
+        /* =========================================================
+           COMO FUNCIONA
+        ========================================================= */
+
+        .passos {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 1px;
+
+            background: var(--borda);
+
+            border: 1px solid var(--borda);
+            border-radius: 16px;
+
+            overflow: hidden;
+        }
+
+        .passo {
+            background: var(--fundo-secundario);
+            padding: 32px;
+        }
+
+        .passo-numero {
+            color: #737c86;
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 35px;
+        }
+
+        .passo h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+        }
+
+        .passo p {
+            color: var(--texto-secundario);
+            font-size: 15px;
+        }
+
+        /* =========================================================
+           PRODUTO
+        ========================================================= */
+
+        .produto {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+
+            gap: 70px;
+            align-items: center;
+        }
+
+        .produto-caixa {
+            min-height: 460px;
+
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    #252c34 0,
+                    #12161a 45%,
+                    #0c0f12 100%
+                );
+
+            border: 1px solid var(--borda);
+            border-radius: 24px;
+        }
+
+        .produto-logo {
+            font-size: clamp(45px, 7vw, 80px);
+            font-weight: 900;
+            letter-spacing: -4px;
+        }
+
+        .produto-texto h2 {
+            font-size: clamp(38px, 5vw, 60px);
+            line-height: 1.05;
+
+            margin-bottom: 25px;
+        }
+
+        .produto-texto p {
+            color: var(--texto-secundario);
+            font-size: 18px;
+
+            margin-bottom: 25px;
+        }
+
+        .check {
+            margin: 14px 0;
+            color: #dce0e4;
+        }
+
+        .check::before {
+            content: "✓";
+            margin-right: 12px;
+            color: var(--verde);
+            font-weight: 900;
+        }
+
+        /* =========================================================
+           PLANO
+        ========================================================= */
+
+        .plano-container {
+            max-width: 650px;
+        }
+
+        .plano {
+            background: #ffffff;
+            color: #0b0d10;
+
+            border-radius: 22px;
+            padding: 40px;
+
+            margin-top: 45px;
+        }
+
+        .plano-tag {
+            color: #62676d;
+
+            font-size: 14px;
+            font-weight: 700;
+
+            margin-bottom: 12px;
+        }
+
+        .plano h3 {
+            font-size: 32px;
+            margin-bottom: 8px;
+        }
+
+        .plano-descricao {
+            color: #62676d;
+            margin-bottom: 28px;
+        }
+
+        .plano-status {
+            padding: 14px 16px;
+
+            border-radius: 9px;
+            background: #f0f1f3;
+
+            margin-bottom: 25px;
+        }
+
+        .plano .botao {
+            width: 100%;
+
             background: #0b0d10;
             color: #ffffff;
         }
 
-        header {
-            width: 100%;
-            padding: 24px 8%;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            border-bottom: 1px solid #24282e;
+        /* =========================================================
+           FAQ
+        ========================================================= */
+
+        details {
+            border-bottom: 1px solid var(--borda);
+            padding: 24px 0;
         }
 
-        .logo {
-            font-size: 24px;
+        summary {
+            cursor: pointer;
+
+            font-size: 19px;
             font-weight: 700;
+
+            list-style: none;
         }
 
-        nav a {
-            color: #d7d7d7;
-            text-decoration: none;
-            margin-left: 25px;
+        details p {
+            color: var(--texto-secundario);
+            max-width: 800px;
+
+            margin-top: 16px;
         }
 
-        .hero {
-            min-height: calc(100vh - 80px);
-            padding: 80px 8%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: flex-start;
-            max-width: 1100px;
-            margin: auto;
+        /* =========================================================
+           CTA FINAL
+        ========================================================= */
+
+        .cta-final {
+            text-align: center;
+            padding: 130px 0;
         }
 
-        .tag {
-            padding: 8px 14px;
-            border: 1px solid #343a40;
-            border-radius: 30px;
-            color: #b9c0c8;
-            margin-bottom: 25px;
-        }
-
-        h1 {
-            font-size: clamp(42px, 8vw, 82px);
+        .cta-final h2 {
+            font-size: clamp(42px, 6vw, 72px);
             line-height: 1;
-            margin-bottom: 25px;
+
+            max-width: 850px;
+            margin: 0 auto 25px;
         }
 
-        .descricao {
-            font-size: 20px;
-            color: #b9c0c8;
-            line-height: 1.6;
-            max-width: 700px;
-            margin-bottom: 35px;
+        .cta-final p {
+            color: var(--texto-secundario);
+
+            font-size: 19px;
+
+            max-width: 620px;
+            margin: 0 auto 35px;
         }
 
-        .botoes {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
+        .cta-final .acoes {
+            justify-content: center;
         }
 
-        .botao {
-            display: inline-block;
-            padding: 16px 25px;
-            border-radius: 10px;
-            text-decoration: none;
-            font-weight: 700;
-        }
-
-        .principal {
-            background: #ffffff;
-            color: #101216;
-        }
-
-        .secundario {
-            border: 1px solid #444b55;
-            color: #ffffff;
-        }
+        /* =========================================================
+           FOOTER
+        ========================================================= */
 
         footer {
-            padding: 35px 8%;
-            text-align: center;
-            color: #777f88;
-            border-top: 1px solid #24282e;
+            border-top: 1px solid var(--borda);
+
+            padding: 35px 0;
+
+            color: #747d87;
+            font-size: 14px;
+        }
+
+        .footer-conteudo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+
+            gap: 20px;
+        }
+
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .footer-links a {
+            text-decoration: none;
+            color: #949da7;
+        }
+
+        /* =========================================================
+           RESPONSIVO
+        ========================================================= */
+
+        @media (max-width: 900px) {
+
+            nav a:not(.nav-download) {
+                display: none;
+            }
+
+            .hero {
+                min-height: auto;
+                padding: 90px 0;
+            }
+
+            .hero h1 {
+                letter-spacing: -2.5px;
+            }
+
+            .grid-beneficios {
+                grid-template-columns: 1fr;
+            }
+
+            .passos {
+                grid-template-columns: 1fr;
+            }
+
+            .produto {
+                grid-template-columns: 1fr;
+                gap: 40px;
+            }
+
+            .produto-caixa {
+                min-height: 320px;
+            }
+
+            .footer-conteudo {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 550px) {
+
+            .header-conteudo {
+                height: 68px;
+            }
+
+            .hero h1 {
+                font-size: 52px;
+            }
+
+            section {
+                padding: 80px 0;
+            }
+
+            .acoes {
+                flex-direction: column;
+            }
+
+            .botao {
+                width: 100%;
+            }
+
+            .card,
+            .passo {
+                padding: 25px;
+            }
+
+            .plano {
+                padding: 28px;
+            }
         }
     </style>
 </head>
 
+
 <body>
 
-<header>
-    <div class="logo">SlipSeend</div>
 
-    <nav>
-        <a href="/download">Download</a>
-    </nav>
+<!-- =========================================================
+     HEADER
+========================================================= -->
+
+<header>
+
+    <div class="container header-conteudo">
+
+        <div class="logo">
+            SlipSeend
+        </div>
+
+        <nav>
+
+            <a href="#beneficios">
+                Benefícios
+            </a>
+
+            <a href="#como-funciona">
+                Como funciona
+            </a>
+
+            <a href="#faq">
+                Dúvidas
+            </a>
+
+            <a class="nav-download" href="/download">
+                Download
+            </a>
+
+        </nav>
+
+    </div>
+
 </header>
 
-<main class="hero">
 
-    <div class="tag">
-        SlipSeend para Windows
-    </div>
+<!-- =========================================================
+     HERO
+========================================================= -->
 
-    <h1>
-        Automação simples.<br>
-        Trabalho mais rápido.
-    </h1>
+<main>
 
-    <p class="descricao">
-        O SlipSeend foi desenvolvido para automatizar processos,
-        organizar operações e tornar o trabalho diário mais rápido
-        e eficiente.
-    </p>
+    <section class="hero">
 
-    <div class="botoes">
+        <div class="container">
 
-        <a class="botao principal" href="/download">
-            Baixar SlipSeend
-        </a>
+            <div class="hero-conteudo">
 
-        <a class="botao secundario" href="mailto:contato@slipseend.com.br">
-            Falar com suporte
-        </a>
+                <div class="badge">
 
-    </div>
+                    <span class="badge-ponto"></span>
+
+                    SlipSeend para Windows
+
+                </div>
+
+
+                <h1>
+                    Menos trabalho manual.<br>
+                    Mais resultado.
+                </h1>
+
+
+                <p class="hero-descricao">
+
+                    O SlipSeend automatiza processos repetitivos,
+                    organiza sua operação e ajuda você a trabalhar
+                    de forma mais rápida, simples e eficiente.
+
+                </p>
+
+
+                <div class="acoes">
+
+                    <a
+                        class="botao botao-principal"
+                        href="/download"
+                    >
+                        Baixar SlipSeend
+                    </a>
+
+
+                    <a
+                        class="botao botao-secundario"
+                        href="#como-funciona"
+                    >
+                        Ver como funciona
+                    </a>
+
+                </div>
+
+
+                <div class="hero-detalhe">
+                    Disponível para Windows • Ativação por licença
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         BENEFÍCIOS
+    ====================================================== -->
+
+    <section
+        id="beneficios"
+        class="secao-cinza"
+    >
+
+        <div class="container">
+
+            <div class="secao-topo">
+
+                <div class="secao-legenda">
+                    Por que usar
+                </div>
+
+                <h2 class="secao-titulo">
+                    Feito para simplificar sua rotina.
+                </h2>
+
+                <p class="secao-texto">
+
+                    Automatize tarefas repetitivas e mantenha
+                    seu trabalho organizado em um único fluxo.
+
+                </p>
+
+            </div>
+
+
+            <div class="grid-beneficios">
+
+
+                <div class="card">
+
+                    <div class="numero">
+                        01
+                    </div>
+
+                    <h3>
+                        Mais velocidade
+                    </h3>
+
+                    <p>
+
+                        Reduza etapas manuais e execute
+                        processos com mais agilidade.
+
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="numero">
+                        02
+                    </div>
+
+                    <h3>
+                        Mais organização
+                    </h3>
+
+                    <p>
+
+                        Centralize sua operação e tenha mais
+                        controle sobre o que já foi processado.
+
+                    </p>
+
+                </div>
+
+
+                <div class="card">
+
+                    <div class="numero">
+                        03
+                    </div>
+
+                    <h3>
+                        Menos trabalho repetitivo
+                    </h3>
+
+                    <p>
+
+                        Deixe o SlipSeend cuidar das etapas
+                        repetitivas enquanto você foca no que importa.
+
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         COMO FUNCIONA
+    ====================================================== -->
+
+    <section id="como-funciona">
+
+        <div class="container">
+
+            <div class="secao-topo">
+
+                <div class="secao-legenda">
+                    Comece rápido
+                </div>
+
+                <h2 class="secao-titulo">
+                    Do pagamento à ativação em poucos passos.
+                </h2>
+
+            </div>
+
+
+            <div class="passos">
+
+
+                <div class="passo">
+
+                    <div class="passo-numero">
+                        PASSO 01
+                    </div>
+
+                    <h3>
+                        Adquira sua licença
+                    </h3>
+
+                    <p>
+                        Faça sua compra pelo canal oficial
+                        do SlipSeend.
+                    </p>
+
+                </div>
+
+
+                <div class="passo">
+
+                    <div class="passo-numero">
+                        PASSO 02
+                    </div>
+
+                    <h3>
+                        Receba sua chave
+                    </h3>
+
+                    <p>
+                        Após a confirmação, sua chave é
+                        enviada automaticamente por e-mail.
+                    </p>
+
+                </div>
+
+
+                <div class="passo">
+
+                    <div class="passo-numero">
+                        PASSO 03
+                    </div>
+
+                    <h3>
+                        Instale o SlipSeend
+                    </h3>
+
+                    <p>
+                        Baixe o instalador oficial diretamente
+                        pelo nosso site.
+                    </p>
+
+                </div>
+
+
+                <div class="passo">
+
+                    <div class="passo-numero">
+                        PASSO 04
+                    </div>
+
+                    <h3>
+                        Ative e use
+                    </h3>
+
+                    <p>
+                        Informe sua chave no aplicativo
+                        e comece a utilizar o SlipSeend.
+                    </p>
+
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PRODUTO
+    ====================================================== -->
+
+    <section class="secao-cinza">
+
+        <div class="container produto">
+
+
+            <div class="produto-caixa">
+
+                <div class="produto-logo">
+                    SlipSeend
+                </div>
+
+            </div>
+
+
+            <div class="produto-texto">
+
+                <div class="secao-legenda">
+                    SlipSeend
+                </div>
+
+                <h2>
+                    Um sistema feito para trabalhar com você.
+                </h2>
+
+                <p>
+
+                    O SlipSeend foi desenvolvido para transformar
+                    processos demorados em um fluxo mais simples
+                    e organizado.
+
+                </p>
+
+
+                <div class="check">
+                    Aplicativo para Windows
+                </div>
+
+                <div class="check">
+                    Licenciamento online
+                </div>
+
+                <div class="check">
+                    Ativação segura
+                </div>
+
+                <div class="check">
+                    Download oficial pelo site
+                </div>
+
+                <div class="check">
+                    Suporte por e-mail
+                </div>
+
+
+                <div
+                    class="acoes"
+                    style="margin-top: 30px;"
+                >
+
+                    <a
+                        href="/download"
+                        class="botao botao-principal"
+                    >
+                        Baixar agora
+                    </a>
+
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         PLANO
+    ====================================================== -->
+
+    <section id="planos">
+
+        <div class="container plano-container">
+
+            <div class="secao-legenda">
+                Licença
+            </div>
+
+            <h2 class="secao-titulo">
+                Comece com o SlipSeend.
+            </h2>
+
+            <p class="secao-texto">
+
+                A contratação online estará disponível
+                diretamente pelo site em breve.
+
+            </p>
+
+
+            <div class="plano">
+
+                <div class="plano-tag">
+                    LICENÇA SLIPSEEND
+                </div>
+
+                <h3>
+                    Plano mensal
+                </h3>
+
+                <p class="plano-descricao">
+                    Acesso ao SlipSeend com licença de uso individual.
+                </p>
+
+
+                <div class="plano-status">
+                    Checkout online em preparação.
+                </div>
+
+
+                <a
+                    class="botao"
+                    href="mailto:contato@slipseend.com.br"
+                >
+                    Falar com a equipe SlipSeend
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         FAQ
+    ====================================================== -->
+
+    <section
+        id="faq"
+        class="secao-cinza"
+    >
+
+        <div class="container">
+
+            <div class="secao-topo">
+
+                <div class="secao-legenda">
+                    Dúvidas
+                </div>
+
+                <h2 class="secao-titulo">
+                    Perguntas frequentes.
+                </h2>
+
+            </div>
+
+
+            <details>
+
+                <summary>
+                    Como recebo minha licença?
+                </summary>
+
+                <p>
+
+                    Após a confirmação do pagamento,
+                    sua chave de ativação é enviada
+                    automaticamente para o e-mail informado
+                    na compra.
+
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+                    Onde faço o download?
+                </summary>
+
+                <p>
+
+                    O instalador oficial está disponível na
+                    página de download do SlipSeend.
+
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+                    Posso instalar em qualquer computador?
+                </summary>
+
+                <p>
+
+                    A licença é vinculada ao computador
+                    utilizado na ativação. Em casos de troca
+                    de equipamento, entre em contato com
+                    nosso suporte.
+
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+                    O SlipSeend funciona sem internet?
+                </summary>
+
+                <p>
+
+                    A validação da licença utiliza conexão
+                    com nosso servidor, portanto o acesso
+                    à internet é necessário para a validação.
+
+                </p>
+
+            </details>
+
+
+            <details>
+
+                <summary>
+                    Preciso guardar minha chave?
+                </summary>
+
+                <p>
+
+                    Sim. Guarde o e-mail recebido após
+                    sua compra, pois ele contém sua chave
+                    de ativação.
+
+                </p>
+
+            </details>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================================
+         CTA FINAL
+    ====================================================== -->
+
+    <section class="cta-final">
+
+        <div class="container">
+
+            <h2>
+                Automatize. Organize. Ganhe tempo.
+            </h2>
+
+            <p>
+
+                Experimente uma forma mais simples
+                de trabalhar com o SlipSeend.
+
+            </p>
+
+
+            <div class="acoes">
+
+                <a
+                    href="/download"
+                    class="botao botao-principal"
+                >
+                    Baixar SlipSeend
+                </a>
+
+                <a
+                    href="mailto:contato@slipseend.com.br"
+                    class="botao botao-secundario"
+                >
+                    Falar com suporte
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
 
 </main>
 
+
+<!-- =========================================================
+     FOOTER
+========================================================= -->
+
 <footer>
-    © 2026 SlipSeend. Todos os direitos reservados.
+
+    <div class="container footer-conteudo">
+
+        <div>
+            © 2026 SlipSeend. Todos os direitos reservados.
+        </div>
+
+
+        <div class="footer-links">
+
+            <a href="/download">
+                Download
+            </a>
+
+            <a href="mailto:contato@slipseend.com.br">
+                Suporte
+            </a>
+
+        </div>
+
+    </div>
+
 </footer>
+
 
 </body>
 </html>
