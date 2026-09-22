@@ -7,7 +7,7 @@
     <meta name="description"
           content="SlipSeend - Automatize processos, reduza tarefas manuais e trabalhe com mais velocidade e organização.">
 
-    <title>SlipSeend | Vendas mais! Enquanto acompanha!</title>
+    <title>SlipSeend | Boletos e acompanhamento mensal</title>
 
     <style>
         :root {
@@ -826,6 +826,64 @@
                 padding: 28px;
             }
         }
+
+        .plano-container { max-width: 1200px; }
+.periodicidade { border:0; margin-top:28px; display:flex; flex-wrap:wrap; gap:20px; }
+.periodicidade legend { margin-bottom:12px; }
+.periodicidade label { cursor:pointer; padding:12px; border:1px solid #555; border-radius:8px; }
+.periodicidade input { accent-color:#e50914; }
+        .planos-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); justify-content:center; gap:22px; }
+        .planos-grid .plano { padding:28px; margin-top:26px; display:flex; flex-direction:column; }
+        .plano h3 { font-size:28px; }
+        .plano ul { padding-left:20px; line-height:1.8; margin:22px 0 28px; flex:1; }
+        .preco { font-size:36px; font-weight:800; }
+        .preco small { font-size:15px; font-weight:400; }
+        .preco-legenda { font-size:12px; color:#62676d; }
+        .aviso-teste { margin-top:26px; padding:20px; border:1px solid #865f28; border-radius:12px; background:#241c10; color:#ffe0a6; line-height:1.7; }
+        .regras-planos { margin-top:24px; color:var(--texto-secundario); line-height:1.7; }
+        a:focus-visible, summary:focus-visible { outline:3px solid #ff5962; outline-offset:5px; }
+        @media(max-width:900px) { .planos-grid { grid-template-columns:1fr; } }
+
+        .demo { position:relative; margin-top:48px; max-width:1000px; scroll-margin-top:100px; }
+        .demo h2 { font-size:clamp(24px,3vw,34px); margin:10px 0 24px; letter-spacing:-.7px; }
+        .demo-tela { overflow:hidden; border:1px solid #3a3034; border-radius:20px; background:#111318; aspect-ratio:16/9; }
+        .demo video { width:100%; height:100%; object-fit:contain; background:#000; }
+        .demo [hidden] { display:none; }
+        .demo-espera { height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:24px; text-align:center; background:radial-gradient(ellipse at top right,#46161e,transparent 70%); }
+        .demo-selo { font-size:12px; letter-spacing:2px; color:#ff8e97; }
+        .demo-chamada { font-size:clamp(22px,3.5vw,42px); font-weight:800; line-height:1.2; margin:20px 0; }
+        #demo-status { color:#b8bec7; font-size:14px; }
+        .demo-fluxo { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin:24px 0 0; padding-left:24px; color:#cbd0d7; font-size:14px; }
+        @media(max-width:600px) { .demo-tela { aspect-ratio:4/3; } .demo-fluxo { grid-template-columns:repeat(2,1fr); } .demo-selo { font-size:10px; letter-spacing:1px; } }
+    .passo p { line-height:1.7; }
+        #faq a { color:#ff8e97; text-decoration:underline; }
+            .tutorial-print { margin:24px 0 0; }
+        .tutorial-print img { display:block; width:100%; max-width:295px; height:auto; border:1px solid #354459; border-radius:12px; margin:0 auto 20px; }
+        .tutorial-instrucoes { padding:0; list-style:none; counter-reset:etapa; display:grid; gap:14px; font-size:14px; color:#b8bec7; line-height:1.6; }
+        .tutorial-instrucoes li { position:relative; padding-left:34px; counter-increment:etapa; }
+        .tutorial-instrucoes li::before { content:counter(etapa); position:absolute; left:0; top:0; width:24px; height:24px; display:grid; place-items:center; border-radius:50%; background:#e50914; color:white; font-weight:800; }
+        .tutorial-instrucoes strong { color:white; }
+            #como-funciona .passos { grid-template-columns:1fr; }
+        .geracao-tutorial { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:28px; margin-top:28px; }
+        .geracao-tutorial figure { margin:0; padding:20px; background:#080d15; border:1px solid #303b4c; border-radius:14px; }
+        .geracao-tutorial figure:first-child { grid-column:1/-1; }
+        .geracao-tutorial figcaption strong { color:#fff; font-size:18px; }
+        .geracao-tutorial figcaption p { margin:12px 0 20px; }
+        .geracao-tutorial img { display:block; width:100%; height:auto; border-radius:8px; }
+        .geracao-tutorial .print-pequeno { max-width:338px; margin:auto; }
+        .geracao-tutorial .print-login { max-width:480px; margin:auto; }
+        .tutorial-ampliar { grid-column:1/-1; font-size:13px; color:#a8afb8; }
+        @media(max-width:700px) { .geracao-tutorial { grid-template-columns:1fr; } .geracao-tutorial figure { padding:14px; } }
+            .whatsapp-tutorial { grid-template-columns:1fr; }
+        .whatsapp-tutorial img { max-width:455px; margin:0 auto 24px; }
+        .audit-demo,.conectar-demo { padding:24px; background:#132030; border:1px solid #384c63; border-radius:12px; margin-top:20px; }
+        .audit-demo h4,.conectar-demo h4 { font-size:22px; margin:16px 0; }
+        .audit-contadores { display:flex; flex-wrap:wrap; gap:20px; margin:20px 0; }
+        .audit-contadores span { padding:12px; background:#09121d; border-radius:8px; }
+        .audit-contadores b { display:block; font-size:24px; color:#619bff; }
+        .audit-linha { padding:16px 0; border-top:1px solid #384c63; display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; }
+        .audit-linha strong { font-size:12px; color:#a5c7ff; }
+        .audit-acao { display:inline-block; padding:12px 18px; background:#087f68; border-radius:6px; font-size:12px; font-weight:700; margin-top:18px; }
     </style>
 </head>
 
@@ -915,16 +973,14 @@
 
 
             <h1>
-                Vendas mais.<br>
-                <span>Enquanto Acompanha!.</span>
+                Seu acompanhamento mensal,<br>
+                <span>organizado.</span>
             </h1>
 
 
             <p class="hero-descricao">
 
-                O SlipSeend automatiza processos repetitivos,
-                organiza sua operação e ajuda você a trabalhar
-                de forma mais rápida, simples e eficiente.
+                Transforme o PDF de acompanhamento mensal em uma rotina organizada: gere boletos, envie pelo WhatsApp e acompanhe sua carteira de clientes.
 
             </p>
 
@@ -933,17 +989,17 @@
 
                 <a
                     class="botao botao-principal"
-                    href="/download"
+                    href="#planos"
                 >
-                    Baixar SlipSeend
+                    Conhecer os planos
                 </a>
 
 
                 <a
                     class="botao botao-secundario"
-                    href="#como-funciona"
+                    href="#demonstracao"
                 >
-                    Ver como funciona
+                    Conhecer o programa
                 </a>
 
             </div>
@@ -954,7 +1010,19 @@
             </div>
 
         </div>
-
+        <div class="demo" id="demonstracao" aria-labelledby="titulo-demo">
+            <div class="secao-legenda">Conheça o SlipSeend</div>
+            <h2 id="titulo-demo">Veja como sua rotina pode funcionar.</h2>
+            <div class="demo-tela">
+                <video id="video-demo" controls playsinline preload="metadata" hidden aria-label="Demonstração do SlipSeend"></video>
+                <div id="demo-espera" class="demo-espera">
+                    <span class="demo-selo">DO PDF AO ACOMPANHAMENTO</span>
+                    <p class="demo-chamada">Menos etapas manuais.<br>Mais organização no mês.</p>
+                    <p id="demo-status" role="status">Vídeo de demonstração em breve.</p>
+                </div>
+            </div>
+            <ol class="demo-fluxo"><li>Importe o PDF</li><li>Gere os boletos</li><li>Envie pelo WhatsApp</li><li>Acompanhe os resultados</li></ol>
+        </div>
     </div>
 
 </section>
@@ -1050,101 +1118,14 @@
 </section>
 
 
-<section id="como-funciona">
-
-    <div class="container">
-
-        <div class="secao-topo">
-
-            <div class="secao-legenda">
-                Comece rápido
-            </div>
-
-            <h2 class="secao-titulo">
-                Do pagamento à ativação em poucos passos.
-            </h2>
-
-        </div>
-
-
-        <div class="passos">
-
-            <div class="passo">
-
-                <div class="passo-numero">
-                    PASSO 01
-                </div>
-
-                <h3>
-                    Adquira sua licença
-                </h3>
-
-                <p>
-                    Faça sua compra pelo canal oficial
-                    do SlipSeend.
-                </p>
-
-            </div>
-
-
-            <div class="passo">
-
-                <div class="passo-numero">
-                    PASSO 02
-                </div>
-
-                <h3>
-                    Receba sua chave
-                </h3>
-
-                <p>
-                    Após o pagamento, sua chave é
-                    enviada automaticamente por e-mail.
-                </p>
-
-            </div>
-
-
-            <div class="passo">
-
-                <div class="passo-numero">
-                    PASSO 03
-                </div>
-
-                <h3>
-                    Baixe o aplicativo
-                </h3>
-
-                <p>
-                    Faça o download da versão oficial
-                    diretamente pelo site.
-                </p>
-
-            </div>
-
-
-            <div class="passo">
-
-                <div class="passo-numero">
-                    PASSO 04
-                </div>
-
-                <h3>
-                    Ative e use
-                </h3>
-
-                <p>
-                    Informe sua chave de licença
-                    e comece a utilizar o SlipSeend.
-                </p>
-
-            </div>
-
-        </div>
-
-    </div>
-
-</section>
+<section id="como-funciona"><div class="container"><div class="secao-topo"><div class="secao-legenda">Sua rotina mensal</div><h2 class="secao-titulo">Do relatório ao acompanhamento.</h2></div><div class="passos"><div class="passo"><div class="passo-numero">PASSO 01</div><h3>Importe seu PDF</h3><p>Carregue o relatório mensal de acompanhamento para organizar as propostas que serão trabalhadas.</p><figure class="tutorial-print"><img src="/assets/tutorial/importar-pdf.png" alt="Painel do vendedor do SlipSeend, com os botões Selecionar PDF, Importar PDF e Carregar Propostas." width="295" height="239" loading="lazy"><figcaption><ol class="tutorial-instrucoes"><li><strong>Selecionar PDF:</strong> escolha o relatório mensal no computador.</li><li><strong>Importar PDF:</strong> importe o arquivo selecionado.</li><li><strong>Carregar Propostas:</strong> carregue as propostas para continuar.</li></ol></figcaption></figure></div><div class="passo"><div class="passo-numero">PASSO 02</div><h3>Gere os boletos</h3><p>Defina a competência, confira a quantidade de propostas e inicie a geração. São até 100 boletos por execução.</p>
+<div class="geracao-tutorial">
+<figure><figcaption><strong>1. Prepare o processamento</strong><p>Após importar o PDF, preencha a competência para identificar o período. Confira no Resultado / Log quantas propostas foram carregadas e informe a quantidade de boletos a gerar. Neste exemplo, são 90 propostas.</p></figcaption><a href="/assets/tutorial/dados-processamento.png" target="_blank" rel="noopener" aria-label="Ampliar imagem dos dados do processamento"><img src="/assets/tutorial/dados-processamento.png" width="1137" height="670" loading="lazy" alt="Dados do processamento: competência preenchida, quantidade de 90 boletos e log com 90 propostas carregadas."></a></figure>
+<figure><figcaption><strong>2. Clique em Gerar Boletos</strong><p>O programa abre o navegador e apresenta o aviso para aguardar o login manual.</p></figcaption><a href="/assets/tutorial/gerar-boletos.png" target="_blank" rel="noopener" aria-label="Ampliar imagem do botão Gerar Boletos"><img class="print-pequeno" src="/assets/tutorial/gerar-boletos.png" width="301" height="142" loading="lazy" alt="Menu Boletos com os botões Gerar Boletos e Resumo Boletos."></a></figure>
+<figure><figcaption><strong>3. Faça o login no portal</strong><p>No navegador aberto, entre no portal Honda com seus dados e espere a tela inicial carregar. Ainda não confirme o aviso do SlipSeend.</p></figcaption><a href="/assets/tutorial/login-portal.png" target="_blank" rel="noopener" aria-label="Ampliar imagem da tela de login"><img class="print-login" src="/assets/tutorial/login-portal.png" width="717" height="627" loading="lazy" alt="Tela de login do portal Honda com campos vazios de empresa, usuário e senha."></a></figure>
+<figure><figcaption><strong>4. Confirme para iniciar</strong><p>Com o login concluído e a tela inicial do portal carregada, volte ao aviso e clique em <b>CONTINUAR APÓS LOGIN</b>. A geração dos boletos começa a partir dessa confirmação.</p></figcaption><a href="/assets/tutorial/continuar-login.png" target="_blank" rel="noopener" aria-label="Ampliar imagem do aviso de confirmação"><img class="print-pequeno" src="/assets/tutorial/continuar-login.png" width="338" height="319" loading="lazy" alt="Aviso Aguardando login manual Honda, com instruções e botão CONTINUAR APÓS LOGIN."></a></figure>
+<p class="tutorial-ampliar">Clique nas imagens para ampliar em outra aba.</p></div></div><div class="passo"><div class="passo-numero">PASSO 03</div><h3>Envie pelo WhatsApp</h3><p>Prepare a fila, confira os destinatários e conecte seu WhatsApp antes de iniciar os envios.</p><div class="geracao-tutorial whatsapp-tutorial"><figure><figcaption><strong>1. Confira os boletos gerados</strong><p>Consulte o Resumo Boletos. Neste exemplo, há 90 propostas, mas apenas 1 boleto gerado e 89 pendentes. Confira os resultados antes de preparar o envio.</p></figcaption><a href="/assets/tutorial/resumo-geracao.png" target="_blank" rel="noopener" aria-label="Ampliar: Resumo de boletos com 1 gerado e 89 pendentes"><img src="/assets/tutorial/resumo-geracao.png" width="455" height="412" loading="lazy" alt="Resumo de boletos com 1 gerado e 89 pendentes"></a></figure><figure><figcaption><strong>2. Prepare o WhatsApp</strong><p>Clique em Preparar WhatsApp para abrir a auditoria de conferência. Veja quais boletos foram gerados e quais registros estão aptos para envio.</p></figcaption><a href="/assets/tutorial/menu-whatsapp.png" target="_blank" rel="noopener" aria-label="Ampliar: Menu com Preparar WhatsApp e Enviar Boletos"><img src="/assets/tutorial/menu-whatsapp.png" width="294" height="236" loading="lazy" alt="Menu com Preparar WhatsApp e Enviar Boletos"></a><div class="audit-demo" aria-label="Exemplo ilustrativo da auditoria"><span class="demo-selo">EXEMPLO ILUSTRATIVO · DADOS FICTÍCIOS</span><h4>Auditoria WhatsApp</h4><div class="audit-contadores"><span>Total <b>90</b></span><span>Pendentes <b>1</b></span><span>Fora da fila <b>89</b></span></div><div class="audit-linha"><span>Cliente de exemplo A</span><strong>PENDENTE</strong></div><div class="audit-linha"><span>Cliente de exemplo B</span><strong>NÃO GERADO</strong></div><p>Confira quem está apto para envio. Os filtros não liberam registros automaticamente.</p><span class="audit-acao">FECHAR</span></div></figure><figure><figcaption><strong>3. Confira e confirme o envio</strong><p>Após a conferência, clique em Enviar Boletos. A auditoria aparece novamente: revise os registros e clique em CONFIRMAR E CONTINUAR.</p></figcaption><div class="audit-demo" aria-label="Exemplo ilustrativo da auditoria"><span class="demo-selo">EXEMPLO ILUSTRATIVO · DADOS FICTÍCIOS</span><h4>Auditoria WhatsApp</h4><div class="audit-contadores"><span>Total <b>90</b></span><span>Pendentes <b>1</b></span><span>Fora da fila <b>89</b></span></div><div class="audit-linha"><span>Cliente de exemplo A</span><strong>PENDENTE</strong></div><div class="audit-linha"><span>Cliente de exemplo B</span><strong>NÃO GERADO</strong></div><p>Confira quem está apto para envio. Os filtros não liberam registros automaticamente.</p><span class="audit-acao">CONFIRMAR E CONTINUAR</span></div></figure><figure><figcaption><strong>4. Conecte o WhatsApp Web</strong><p>O navegador abre o WhatsApp Web. Use seu celular para escanear o QR exibido naquela sessão e aguarde suas conversas carregarem.</p></figcaption><div class="conectar-demo"><span class="demo-selo">CONEXÃO NO SEU COMPUTADOR</span><h4>Celular → WhatsApp Web</h4><p>Escaneie o QR no navegador aberto pelo programa.</p><p>O QR de acesso não é exibido nesta demonstração.</p></div></figure><figure><figcaption><strong>5. Confirme no aviso do SlipSeend</strong><p>Somente depois que o WhatsApp Web carregar completamente, volte ao aviso e clique em OK para iniciar o envio. Cancelar ou fechar o aviso interrompe essa etapa.</p></figcaption><a href="/assets/tutorial/confirmar-whatsapp.png" target="_blank" rel="noopener" aria-label="Ampliar: Aviso Login manual WhatsApp com os botões OK e Cancel"><img src="/assets/tutorial/confirmar-whatsapp.png" width="374" height="239" loading="lazy" alt="Aviso Login manual WhatsApp com os botões OK e Cancel"></a></figure><p class="tutorial-ampliar">Clique nos prints para ampliar. As auditorias são exemplos ilustrativos, sem dados reais de clientes.</p></div></div><div class="passo"><div class="passo-numero">PASSO 04</div><h3>Acompanhe sua carteira</h3><p>Consulte os resultados do processamento e organize o acompanhamento dos clientes durante o mês.</p></div></div></div></section>
+<section id="ativacao" class="secao-cinza"><div class="container"><div class="secao-topo"><div class="secao-legenda">Compra e ativação</div><h2 class="secao-titulo">Como começar com o SlipSeend.</h2></div><div class="passos"><div class="passo"><div class="passo-numero">PASSO 01</div><h3>Escolha seu plano</h3><p>Essencial ou Premium, com opção mensal ou anual. Durante os testes, a assinatura disponível custa R$5 por mês.</p></div><div class="passo"><div class="passo-numero">PASSO 02</div><h3>Receba sua chave</h3><p>Após a confirmação do pagamento, a licença é enviada para o e-mail informado na compra.</p></div><div class="passo"><div class="passo-numero">PASSO 03</div><h3>Baixe o SlipSeend</h3><p>Use o instalador oficial para Windows 10 ou 11, disponível na página de download.</p></div><div class="passo"><div class="passo-numero">PASSO 04</div><h3>Ative no computador</h3><p>Informe sua chave no programa. A licença fica vinculada ao computador utilizado na ativação.</p></div></div></div></section>
 
 
 <section class="secao-cinza">
@@ -1252,59 +1233,7 @@
 </section>
 
 
-<section id="planos">
-
-    <div class="container plano-container">
-
-        <div class="secao-legenda">
-            Licença
-        </div>
-
-        <h2 class="secao-titulo">
-            Comece com o SlipSeend.
-        </h2>
-
-        <p class="secao-texto">
-
-            Em breve você poderá contratar sua licença
-            diretamente pelo site.
-
-        </p>
-
-
-        <div class="plano">
-
-            <div class="plano-tag">
-                SLIPSEEND
-            </div>
-
-            <h3>
-                Plano mensal
-            </h3>
-
-            <p class="plano-descricao">
-                Licença individual com acesso ao SlipSeend.
-            </p>
-
-
-            <div class="plano-status">
-                Checkout online em preparação.
-            </div>
-
-
-            <a
-                class="botao"
-                href="mailto:contato@slipseend.com.br"
-            >
-                Falar com a equipe
-            </a>
-
-        </div>
-
-    </div>
-
-</section>
-
+<section id="planos"><div class="container plano-container"><div class="secao-legenda">Planos para sua carteira</div><h2 class="secao-titulo">Um plano para o tamanho da sua carteira.</h2><p class="secao-texto">Escolha entre 150 e 500 boletos por mês, com WhatsApp e acompanhamento incluídos, sem franquia de mensagens.</p><div class="aviso-teste"><strong>Fase de testes — cobrança real de R$5/mês.</strong><br>Os planos estão em preparação. A seleção permite testar o fluxo de assinatura; as franquias ainda não estão disponíveis. Os preços de lançamento não serão aplicados automaticamente.</div><fieldset class="periodicidade"><legend>Como você prefere contratar no lançamento?</legend><label><input type="radio" name="ciclo" value="mensal" checked> Mensal</label><label><input type="radio" name="ciclo" value="anual"> Anual · economize 2 mensalidades</label></fieldset><div class="planos-grid"><article class="plano"><div class="plano-tag">ATÉ 150 BOLETOS / MÊS</div><h3>Essencial</h3><p class="plano-descricao">Para organizar uma carteira menor.</p><p class="preco">R$ 49,90<small>/mês</small></p><p class="preco-legenda">Preço previsto para o lançamento</p><ul><li>Geração de boletos</li><li>Envio pelo WhatsApp incluído</li><li>Acompanhamento mensal</li><li>Licença para um computador</li></ul><a class="botao" href="/checkout-teste/?plano=essencial">Testar fluxo Essencial</a></article><article class="plano"><div class="plano-tag">ATÉ 500 BOLETOS / MÊS</div><h3>Premium</h3><p class="plano-descricao">Para quem trabalha com um volume maior.</p><p class="preco">R$ 119,90<small>/mês</small></p><p class="preco-legenda">Preço previsto para o lançamento</p><ul><li>Geração de boletos</li><li>Envio pelo WhatsApp incluído</li><li>Acompanhamento mensal</li><li>Licença para um computador</li></ul><a class="botao" href="/checkout-teste/?plano=premium">Testar fluxo Premium</a></article></div><p class="regras-planos">Regra prevista: falhas e novas tentativas do mesmo boleto não descontam novamente. A franquia é por boleto, não por cliente.</p></div></section>
 
 <section
     id="faq"
@@ -1377,8 +1306,7 @@
             </summary>
 
             <p>
-                A validação da licença utiliza nosso
-                servidor online e requer conexão com a internet.
+                Sim. A validação da licença, a geração de boletos e o envio pelo WhatsApp precisam de conexão com a internet.
             </p>
 
         </details>
@@ -1397,6 +1325,11 @@
 
         </details>
 
+<details><summary>Qual é a diferença entre Essencial e Premium?</summary><p>O Essencial prevê até 150 boletos por mês; o Premium, até 500. Ambos incluem envio pelo WhatsApp e acompanhamento, sem franquia de mensagens. O controle dessas franquias está em preparação.</p></details>
+<details><summary>Como funciona a opção anual?</summary><p>O preço previsto é R$499 por ano no Essencial e R$1.199 por ano no Premium, pagos anualmente. A franquia de boletos será renovada a cada mês, sem liberar toda a quantidade do ano de uma vez. A cobrança anual ainda não está disponível nesta fase de testes.</p></details>
+<details><summary>O limite de 100 é por mês?</summary><p>Não. O programa permite até 100 por execução. Você pode dividir o trabalho em lotes. A franquia mensal do plano é uma contagem separada, ainda em preparação.</p></details>
+<details><summary>Quanto vou pagar durante os testes?</summary><p>A assinatura de teste tem cobrança real e recorrente de R$5 por mês até o cancelamento. Os preços de lançamento exibidos nos planos não serão aplicados automaticamente.</p></details>
+<details><summary>Como solicito o cancelamento?</summary><p>Entre em contato pelo <a href="mailto:contato@slipseend.com.br">contato@slipseend.com.br</a> para receber orientação. Fechar a página de pagamento ou desinstalar o programa não cancela uma assinatura existente.</p></details>
     </div>
 
 </section>
@@ -1422,10 +1355,10 @@
         <div class="acoes">
 
             <a
-                href="/download"
+                href="#planos"
                 class="botao botao-principal"
             >
-                Baixar SlipSeend
+                Escolher meu plano
             </a>
 
             <a
@@ -1471,5 +1404,7 @@
 </footer>
 
 
+<script src="/planos.js" defer></script>
+<script src="/demonstracao.js" defer></script>
 </body>
 </html>

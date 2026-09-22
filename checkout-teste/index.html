@@ -319,6 +319,14 @@
             }
         }
 
+
+        .resumo { border:1px solid var(--borda); padding:18px; border-radius:12px; margin-bottom:24px; }
+        .resumo select { margin-bottom:14px; }
+        .resumo p { font-size:14px; line-height:1.6; margin-top:12px; color:#b8bec7; }
+        select { width:100%; padding:12px; background:#090b0e; color:white; border:1px solid var(--borda); border-radius:8px; font-size:16px; }
+        .consentimento label { font-size:14px; font-weight:400; line-height:1.6; }
+        .consentimento input { width:18px; height:18px; vertical-align:middle; margin-right:6px; }
+        input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible { outline:2px solid #ff5962; outline-offset:3px; }
     </style>
 
 </head>
@@ -349,18 +357,19 @@
 
 
     <h1>
-        Adquira sua licença.
+        Teste sua assinatura.
     </h1>
 
 
     <p class="descricao">
 
-        Preencha seus dados para gerar
-        a cobrança do SlipSeend.
+        Preencha seus dados para iniciar uma assinatura mensal de teste. A cobrança é real e recorrente: R$5 por mês até o cancelamento.
 
     </p>
 
 
+    <div class="resumo"><label for="plano">Plano em avaliação</label><select id="plano"><option value="essencial">Essencial — 150 boletos/mês</option><option value="premium">Premium — 500 boletos/mês</option></select><label for="ciclo">Período em avaliação</label><select id="ciclo"><option value="mensal">Mensal</option><option value="anual">Anual — franquia renovada todo mês</option></select><p id="precoPlano"></p><p>A escolha serve para avaliar o fluxo. As franquias dos planos ainda não estão disponíveis e o preço de lançamento não será aplicado automaticamente.</p></div>
+    <div id="retorno" role="status" class="mensagem"></div>
     <form id="formCheckout">
 
 
@@ -387,7 +396,7 @@
             </label>
 
             <input
-                id="cpfCnpj"
+                maxlength="18" id="cpfCnpj"
                 type="text"
                 inputmode="numeric"
                 required
@@ -412,6 +421,7 @@
         </div>
 
 
+        <p class="consentimento"><label><input type="checkbox" required> Entendo que esta é uma assinatura de teste com cobrança de R$5 por mês até o cancelamento.</label></p>
         <button
             id="botaoComprar"
             type="submit"
@@ -421,7 +431,7 @@
 
 
         <div
-            id="mensagem"
+            role="alert" aria-live="polite" id="mensagem"
             class="mensagem"
         ></div>
 
@@ -448,166 +458,7 @@
 </div>
 
 
-<script>
-
-    const form =
-        document.getElementById(
-            "formCheckout"
-        );
-
-
-    const botao =
-        document.getElementById(
-            "botaoComprar"
-        );
-
-
-    const mensagem =
-        document.getElementById(
-            "mensagem"
-        );
-
-
-    const URL_CHECKOUT =
-        "https://servidorboletosautomacao-production.up.railway.app/api/checkout/criar";
-
-
-    form.addEventListener(
-        "submit",
-        async function (evento) {
-
-            evento.preventDefault();
-
-
-            mensagem.className =
-                "mensagem";
-
-            mensagem.textContent =
-                "";
-
-
-            const nome =
-                document
-                    .getElementById(
-                        "nome"
-                    )
-                    .value
-                    .trim();
-
-
-            const cpfCnpj =
-                document
-                    .getElementById(
-                        "cpfCnpj"
-                    )
-                    .value
-                    .trim();
-
-
-            const email =
-                document
-                    .getElementById(
-                        "email"
-                    )
-                    .value
-                    .trim();
-
-
-            botao.disabled =
-                true;
-
-            botao.textContent =
-                "Gerando pagamento...";
-
-
-            try {
-
-                const resposta =
-                    await fetch(
-                        URL_CHECKOUT,
-                        {
-
-                            method: "POST",
-
-                            headers: {
-
-                                "Content-Type":
-                                    "application/json"
-
-                            },
-
-                            body:
-                                JSON.stringify(
-                                    {
-                                        nome: nome,
-                                        cpfCnpj: cpfCnpj,
-                                        email: email
-                                    }
-                                )
-                        }
-                    );
-
-
-                const dados =
-                    await resposta.json();
-
-
-                if (!resposta.ok
-                        || !dados.ok) {
-
-                    throw new Error(
-                        dados.mensagem
-                            || "Não foi possível gerar o pagamento."
-                    );
-                }
-
-
-                if (!dados.invoiceUrl) {
-
-                    throw new Error(
-                        "O servidor não retornou o link de pagamento."
-                    );
-                }
-
-
-                mensagem.className =
-                    "mensagem sucesso";
-
-                mensagem.textContent =
-                    "Pagamento criado. Redirecionando...";
-
-
-                setTimeout(
-                    function () {
-
-                        window.location.href =
-                            dados.invoiceUrl;
-
-                    },
-                    800
-                );
-
-
-            } catch (erro) {
-
-                mensagem.className =
-                    "mensagem erro";
-
-                mensagem.textContent =
-                    erro.message
-                    || "Erro ao iniciar pagamento.";
-
-
-                botao.disabled =
-                    false;
-
-                botao.textContent =
-                    "Continuar para pagamento";
-            }
-        }
-    );
-
-</script>
+<script src="/checkout-teste/checkout.js" defer></script>
 
 
 </body>
