@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <meta http-equiv="Content-Security-Policy"
+          content="default-src 'none'; script-src 'unsafe-inline'; style-src 'unsafe-inline'; connect-src https://servidorboletosautomacao-production.up.railway.app; base-uri 'none'; form-action 'none';">
+
+    <title>Confirmar solicitação — SlipSeend</title>
+
+    <style>
+        :root {
+            color-scheme: dark;
+            --fundo: #0b0d10;
+            --card: #13161a;
+            --borda: #353b44;
+            --texto: #ffffff;
+            --secundario: #bdc4ce;
+            --vermelho: #df0916;
+        }
+
+        * { box-sizing: border-box; }
+        [hidden] { display: none !important; }
+
+        body {
+            margin: 0;
+            padding: 32px 20px;
+            background: var(--fundo);
+            color: var(--texto);
+            font: 16px/1.6 Arial, Helvetica, sans-serif;
+        }
+
+        .pagina {
+            width: 100%;
+            max-width: 680px;
+            margin: auto;
+        }
+
+        .marca {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            color: white;
+            text-decoration: none;
+            font-size: 25px;
+            font-weight: 800;
+        }
+
+        .icone {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            background: var(--vermelho);
+            font-size: 18px;
+        }
+
+        main {
+            padding: 32px;
+            border: 1px solid var(--borda);
+            border-radius: 20px;
+            background: var(--card);
+        }
+
+        h1 {
+            margin: 0 0 14px;
+            font-size: clamp(28px, 6vw, 38px);
+            line-height: 1.2;
+        }
+
+        p { margin: 0 0 18px; }
+
+        .descricao,
+        .nota { color: var(--secundario); }
+
+        .mensagem {
+            margin: 24px 0;
+            padding: 17px;
+            border: 1px solid var(--borda);
+            border-radius: 12px;
+            background: #0c0f13;
+            overflow-wrap: anywhere;
+        }
+
+        .mensagem[data-tipo="erro"] {
+            background: #35181c;
+            border-color: #a83b45;
+        }
+
+        .mensagem[data-tipo="sucesso"] {
+            background: #103127;
+            border-color: #258363;
+        }
+
+        dl {
+            margin: 24px 0;
+            padding: 20px;
+            border: 1px solid var(--borda);
+            border-radius: 12px;
+        }
+
+        dt {
+            margin-top: 15px;
+            color: var(--secundario);
+            font-size: 14px;
+        }
+
+        dt:first-child { margin-top: 0; }
+
+        dd {
+            margin: 4px 0 0;
+            font-weight: 700;
+            overflow-wrap: anywhere;
+        }
+
+        label {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        input[type="checkbox"] {
+            margin-top: 5px;
+            min-width: 18px;
+            height: 18px;
+            accent-color: var(--vermelho);
+        }
+
+        button {
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 18px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--vermelho);
+            color: white;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .secundario {
+            background: #303844;
+            margin-bottom: 20px;
+        }
+
+        .nota {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        a {
+            color: #ffb3b9;
+            text-underline-offset: 4px;
+            overflow-wrap: anywhere;
+        }
+
+        footer { margin-top: 24px; }
+
+        :focus-visible {
+            outline: 3px solid #ffb3b9;
+            outline-offset: 4px;
+        }
+
+        @media (max-width: 520px) {
+            body { padding: 20px 14px; }
+            main { padding: 24px 20px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="pagina">
+    <header>
+        <a class="marca" href="/" aria-label="SlipSeend — início">
+            <span class="icone" aria-hidden="true">S</span>
+            <span>SlipSeend</span>
+        </a>
+    </header>
+
+    <main>
+        <h1>Confirme sua solicitação.</h1>
+
+        <p class="descricao">
+            Confira as informações do pedido recebido por e-mail.
+        </p>
+
+        <div id="mensagem"
+             class="mensagem"
+             role="status"
+             aria-live="polite"
+             aria-atomic="true">
+            Consultando seu pedido…
+        </div>
+
+        <dl id="detalhes" hidden>
+            <dt>Plano</dt>
+            <dd id="plano"></dd>
+
+            <dt>Ciclo da assinatura</dt>
+            <dd id="ciclo"></dd>
+
+            <dt>Pedido</dt>
+            <dd id="tipoPedido"></dd>
+
+            <dt>Solicitado em</dt>
+            <dd id="dataPedido"></dd>
+
+            <dt>Protocolo</dt>
+            <dd id="protocolo"></dd>
+
+            <dt>Link válido até</dt>
+            <dd id="validade"></dd>
+        </dl>
+
+        <form id="formulario" hidden>
+            <label>
+                <input id="aceite" type="checkbox" required>
+                <span id="textoAceite"></span>
+            </label>
+
+            <button id="confirmar" type="submit" disabled>
+                Confirmar solicitação
+            </button>
+
+            <p class="nota">
+                A confirmação autoriza o processamento do pedido.
+                Você receberá por e-mail o resultado do cancelamento
+                e o andamento do reembolso, quando solicitado.
+            </p>
+        </form>
+
+        <button id="repetir"
+                class="secundario"
+                type="button"
+                hidden>
+            Tentar consultar novamente
+        </button>
+
+        <noscript>
+            <p>
+                Ative o JavaScript para consultar este pedido ou
+                entre em contato com nosso atendimento.
+            </p>
+        </noscript>
+
+        <p class="nota">
+            Precisa de ajuda?
+            <a id="atendimento" href="mailto:slipseend@gmail.com">
+                slipseend@gmail.com
+            </a>
+        </p>
+
+        <a href="/cancelamento/">
+            Condições de cancelamento e reembolso
+        </a>
+    </main>
+
+    <footer>
+        <a href="/">← Voltar ao início</a>
+    </footer>
+</div>
+
+<script>
+(() => {
+    "use strict";
+
+    const API =
+        "https://servidorboletosautomacao-production.up.railway.app" +
+        "/api/cancelamentos/confirmacao";
+
+    const elemento = id => document.getElementById(id);
+
+    const mensagem = elemento("mensagem");
+    const detalhes = elemento("detalhes");
+    const formulario = elemento("formulario");
+    const aceite = elemento("aceite");
+    const confirmar = elemento("confirmar");
+    const repetir = elemento("repetir");
+
+    const parametros = new URLSearchParams(
+        window.location.hash.slice(1)
+    );
+
+    const credenciais = {
+        protocolo: parametros.get("protocolo") || "",
+        token: parametros.get("token") || ""
+    };
+
+    const linkValido =
+        parametros.getAll("protocolo").length === 1 &&
+        parametros.getAll("token").length === 1 &&
+        /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+            .test(credenciais.protocolo) &&
+        /^[A-Za-z0-9_-]{43}$/.test(credenciais.token);
+
+    // Retira o token da barra de endereço e mantém somente em memória.
+    try {
+        history.replaceState(null, "", window.location.pathname);
+    } catch {
+        // A validação continua mesmo se o navegador impedir essa operação.
+    }
+
+    let ocupado = false;
+    let podeConfirmar = false;
+
+    class ErroApi extends Error {
+        constructor(status) {
+            super("Não foi possível concluir a requisição.");
+            this.status = status;
+        }
+    }
+
+    function mostrarMensagem(texto, tipo = "") {
+        mensagem.textContent = texto;
+        mensagem.dataset.tipo = tipo;
+    }
+
+    function atualizarBotao() {
+        confirmar.disabled = ocupado || !podeConfirmar || !aceite.checked;
+    }
+
+    function formatarData(valor) {
+        const data = new Date(valor);
+
+        if (typeof valor !== "string" || Number.isNaN(data.getTime())) {
+            throw new ErroApi(0);
+        }
+
+        return new Intl.DateTimeFormat("pt-BR", {
+            dateStyle: "short",
+            timeStyle: "short",
+            timeZone: "America/Fortaleza"
+        }).format(data) + " — horário de Fortaleza";
+    }
+
+    async function enviar(acao) {
+        const controle = new AbortController();
+        const tempo = setTimeout(() => controle.abort(), 20000);
+
+        try {
+            const resposta = await fetch(API + "/" + acao, {
+                method: "POST",
+                mode: "cors",
+                credentials: "omit",
+                cache: "no-store",
+                redirect: "error",
+                referrerPolicy: "no-referrer",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                body: JSON.stringify(credenciais),
+                signal: controle.signal
+            });
+
+            if (!resposta.ok) {
+                throw new ErroApi(resposta.status);
+            }
+
+            const dados = await resposta.json();
+
+            if (!dados || dados.ok !== true) {
+                throw new ErroApi(0);
+            }
+
+            return dados;
+        } finally {
+            clearTimeout(tempo);
+        }
+    }
+
+    async function consultar() {
+        if (ocupado) return;
+
+        ocupado = true;
+        podeConfirmar = false;
+        aceite.checked = false;
+        formulario.hidden = true;
+        detalhes.hidden = true;
+        repetir.hidden = true;
+        atualizarBotao();
+
+        mostrarMensagem("Consultando seu pedido…");
+
+        try {
+            const resposta = await enviar("consultar");
+            const pedido = resposta.pedido;
+
+            if (!pedido ||
+                pedido.protocolo !== credenciais.protocolo ||
+                typeof pedido.reembolsoSolicitado !== "boolean" ||
+                typeof pedido.plano !== "string" ||
+                typeof pedido.ciclo !== "string") {
+                throw new ErroApi(0);
+            }
+
+            const planos = {
+                ESSENCIAL: "Essencial",
+                PREMIUM: "Premium"
+            };
+
+            const ciclos = {
+                MONTHLY: "Mensal",
+                YEARLY: "Anual"
+            };
+
+            elemento("plano").textContent =
+                planos[pedido.plano] || pedido.plano;
+
+            elemento("ciclo").textContent =
+                ciclos[pedido.ciclo] || pedido.ciclo;
+
+            elemento("tipoPedido").textContent =
+                pedido.reembolsoSolicitado
+                    ? "Encerrar as próximas renovações e solicitar reembolso."
+                    : "Encerrar as próximas renovações.";
+
+            elemento("dataPedido").textContent =
+                formatarData(pedido.dataSolicitacao);
+
+            elemento("validade").textContent =
+                formatarData(pedido.linkExpiraEm);
+
+            elemento("protocolo").textContent = pedido.protocolo;
+
+            elemento("textoAceite").textContent =
+                pedido.reembolsoSolicitado
+                    ? "Autorizo o cancelamento das próximas renovações " +
+                      "e a análise do reembolso solicitado."
+                    : "Autorizo o cancelamento das próximas renovações.";
+
+            detalhes.hidden = false;
+            formulario.hidden = false;
+            podeConfirmar = true;
+
+            mostrarMensagem(
+                "Confira o pedido abaixo e marque a autorização para continuar."
+            );
+        } catch (erro) {
+            if (erro instanceof ErroApi && erro.status === 400) {
+                mostrarMensagem(
+                    "Este link é inválido, expirou ou já foi utilizado. " +
+                    "Entre em contato com o atendimento informando o protocolo.",
+                    "erro"
+                );
+            } else {
+                mostrarMensagem(
+                    "Não foi possível consultar o pedido agora. " +
+                    "Tente novamente ou fale com o atendimento.",
+                    "erro"
+                );
+
+                repetir.hidden = false;
+            }
+        } finally {
+            ocupado = false;
+            atualizarBotao();
+        }
+    }
+
+    formulario.addEventListener("submit", async evento => {
+        evento.preventDefault();
+
+        if (ocupado || !podeConfirmar || !aceite.checked) return;
+
+        ocupado = true;
+        atualizarBotao();
+        confirmar.textContent = "Enviando confirmação…";
+
+        mostrarMensagem("Enviando sua confirmação…");
+
+        try {
+            const resultado = await enviar("confirmar");
+
+            if (resultado.protocolo !== credenciais.protocolo ||
+                resultado.status !== "CONFIRMADA") {
+                throw new ErroApi(0);
+            }
+
+            formulario.hidden = true;
+
+            mostrarMensagem(
+                "Solicitação confirmada. Protocolo: " +
+                resultado.protocolo +
+                ". Você receberá por e-mail o resultado do processamento.",
+                "sucesso"
+            );
+
+            credenciais.token = "";
+        } catch (erro) {
+            formulario.hidden = true;
+
+            if (erro instanceof ErroApi && erro.status === 400) {
+                mostrarMensagem(
+                    "Este link é inválido, expirou ou já foi utilizado. " +
+                    "Para acompanhar seu pedido, fale com o atendimento. " +
+                    "Protocolo: " + credenciais.protocolo + ".",
+                    "erro"
+                );
+            } else {
+                mostrarMensagem(
+                    "Não conseguimos confirmar a resposta do servidor. " +
+                    "Seu pedido pode já ter sido registrado. " +
+                    "Fale com o atendimento informando o protocolo: " +
+                    credenciais.protocolo + ".",
+                    "erro"
+                );
+            }
+        } finally {
+            ocupado = false;
+            podeConfirmar = false;
+            atualizarBotao();
+        }
+    });
+
+    aceite.addEventListener("change", atualizarBotao);
+    repetir.addEventListener("click", consultar);
+
+    if (linkValido) {
+        elemento("atendimento").href =
+            "mailto:slipseend@gmail.com?subject=" +
+            encodeURIComponent(
+                "Atendimento — protocolo " + credenciais.protocolo
+            );
+
+        consultar();
+    } else {
+        mostrarMensagem(
+            "Abra o link completo recebido no e-mail de confirmação. " +
+            "Se precisar de ajuda, entre em contato com nosso atendimento.",
+            "erro"
+        );
+    }
+})();
+</script>
+</body>
+</html>
