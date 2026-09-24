@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="referrer" content="no-referrer">
+    <meta
+        http-equiv="Content-Security-Policy"
+        content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://servidorboletosautomacao-production.up.railway.app; base-uri 'none'; form-action 'none'; object-src 'none'"
+    >
+
+    <title>Solicitar cancelamento — SlipSeend</title>
+
+    <style>
+        :root {
+            color-scheme: dark;
+            --fundo: #0b0d10;
+            --card: #13161a;
+            --campo: #0c0f13;
+            --borda: #353b44;
+            --texto: #ffffff;
+            --secundario: #bdc4ce;
+            --vermelho: #df0916;
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            margin: 0;
+            padding: 32px 18px;
+            background: var(--fundo);
+            color: var(--texto);
+            font: 16px/1.6 Arial, Helvetica, sans-serif;
+        }
+
+        .pagina {
+            width: 100%;
+            max-width: 680px;
+            margin: auto;
+        }
+
+        .marca {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 24px;
+            color: white;
+            font-size: 25px;
+            font-weight: bold;
+            text-decoration: none;
+        }
+
+        .icone {
+            display: grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 11px;
+            background: var(--vermelho);
+            font-size: 18px;
+        }
+
+        main {
+            padding: 32px;
+            border: 1px solid var(--borda);
+            border-radius: 20px;
+            background: var(--card);
+        }
+
+        h1 {
+            margin: 0 0 16px;
+            font-size: clamp(28px, 6vw, 38px);
+            line-height: 1.2;
+        }
+
+        h2 { margin-top: 0; font-size: 23px; }
+        p { margin: 0 0 18px; }
+
+        .descricao, .nota { color: var(--secundario); }
+        .nota { font-size: 14px; }
+
+        fieldset {
+            min-width: 0;
+            margin: 0;
+            padding: 0;
+            border: 0;
+        }
+
+        label, legend { font-weight: bold; }
+
+        input[type="email"] {
+            display: block;
+            width: 100%;
+            min-height: 50px;
+            margin: 8px 0 22px;
+            padding: 12px;
+            border: 1px solid var(--borda);
+            border-radius: 9px;
+            background: var(--campo);
+            color: var(--texto);
+            font: inherit;
+        }
+
+        .opcoes { margin-bottom: 24px; }
+        .opcoes legend { margin-bottom: 10px; }
+
+        .opcao {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 10px;
+            padding: 14px;
+            border: 1px solid var(--borda);
+            border-radius: 10px;
+            background: var(--campo);
+            cursor: pointer;
+            font-weight: normal;
+        }
+
+        .opcao input {
+            margin-top: 6px;
+            accent-color: var(--vermelho);
+        }
+
+        .opcao strong, .opcao small { display: block; }
+        .opcao small { margin-top: 4px; color: var(--secundario); }
+
+        button {
+            width: 100%;
+            min-height: 52px;
+            padding: 14px 18px;
+            border: 0;
+            border-radius: 10px;
+            background: var(--vermelho);
+            color: white;
+            font: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        button:disabled { opacity: .6; cursor: not-allowed; }
+
+        .secundario {
+            margin-top: 18px;
+            border: 1px solid var(--borda);
+            background: transparent;
+        }
+
+        a { color: #ffb3b9; text-underline-offset: 4px; }
+        a:hover { color: white; }
+
+        .caixa {
+            margin-top: 22px;
+            padding: 18px;
+            border: 1px solid var(--borda);
+            border-radius: 12px;
+            background: var(--campo);
+            overflow-wrap: anywhere;
+        }
+
+        #mensagem[data-tipo="erro"] {
+            border-color: #bd4650;
+            color: #ffd5d9;
+        }
+
+        #mensagem[data-tipo="sucesso"] {
+            border-color: #30866a;
+            color: #c4f4df;
+        }
+
+        #mensagem:empty, #espera:empty { display: none; }
+
+        code {
+            font-size: 14px;
+            overflow-wrap: anywhere;
+        }
+
+        dt { margin-top: 14px; font-weight: bold; }
+        dd { margin: 4px 0 0; overflow-wrap: anywhere; }
+
+        footer { margin-top: 22px; }
+        footer a { display: inline-block; padding: 8px 0; }
+
+        :focus-visible {
+            outline: 3px solid #ffb3b9;
+            outline-offset: 4px;
+        }
+
+        [hidden] { display: none !important; }
+
+        @media (max-width: 520px) {
+            main { padding: 25px 19px; }
+            body { padding: 22px 12px; }
+        }
+    </style>
+</head>
+
+<body>
+<div class="pagina">
+    <header>
+        <a class="marca" href="/" aria-label="SlipSeend — início">
+            <span class="icone" aria-hidden="true">S</span>
+            SlipSeend
+        </a>
+    </header>
+
+    <main>
+        <h1>Solicitar cancelamento.</h1>
+
+        <p class="descricao">
+            Informe o e-mail usado na compra e escolha o que deseja solicitar.
+            Acompanhe esse e-mail para confirmar o pedido e receber orientações.
+        </p>
+
+        <form id="formulario">
+            <fieldset id="campos">
+                <label for="email">E-mail usado na compra</label>
+                <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    maxlength="180"
+                    autocomplete="email"
+                    autocapitalize="none"
+                    spellcheck="false"
+                    required
+                >
+
+                <fieldset class="opcoes">
+                    <legend>O que você deseja solicitar?</legend>
+
+                    <label class="opcao">
+                        <input type="radio" name="tipo" value="nao" required>
+                        <span>
+                            <strong>Cancelar as próximas renovações</strong>
+                            <small>
+                                Solicitar o encerramento das próximas cobranças.
+                            </small>
+                        </span>
+                    </label>
+
+                    <label class="opcao">
+                        <input type="radio" name="tipo" value="sim" required>
+                        <span>
+                            <strong>Cancelar e solicitar reembolso</strong>
+                            <small>
+                                Solicitar também a análise da devolução
+                                do pagamento.
+                            </small>
+                        </span>
+                    </label>
+                </fieldset>
+
+                <p class="nota">
+                    Consulte as
+                    <a href="/cancelamento/">condições de cancelamento e reembolso</a>.
+                    A conclusão do pedido será informada por e-mail.
+                </p>
+            </fieldset>
+
+            <button id="enviar" type="submit" disabled>
+                Enviar solicitação
+            </button>
+
+            <p id="espera" class="nota" role="status"></p>
+        </form>
+
+        <div
+            id="mensagem"
+            class="caixa"
+            role="status"
+            aria-live="polite"
+        ></div>
+
+        <section id="resultado" class="caixa" tabindex="-1" hidden>
+            <h2>Solicitação recebida</h2>
+
+            <dl>
+                <dt>Protocolo</dt>
+                <dd id="protocolo"></dd>
+
+                <dt>Data de recebimento — horário de Brasília</dt>
+                <dd id="data"></dd>
+            </dl>
+
+            <p>
+                Guarde este protocolo e acompanhe o e-mail usado na compra,
+                incluindo a caixa de spam.
+            </p>
+
+            <p class="nota">
+                Se receber um link de confirmação, abra-o e confirme seu pedido.
+                Se a mensagem não chegar, fale com nosso atendimento
+                informando o protocolo.
+            </p>
+
+            <p class="nota">
+                Este comprovante registra o recebimento da solicitação.
+                O cancelamento e o eventual reembolso serão confirmados
+                após o processamento.
+            </p>
+
+            <button id="novo" type="button" class="secundario">
+                Iniciar outra solicitação
+            </button>
+        </section>
+
+        <div id="referencia-caixa" class="caixa" hidden>
+            <strong>Referência para atendimento</strong>
+            <p><code id="referencia"></code></p>
+            <p class="nota">
+                Guarde esta referência caso precise falar com nossa equipe.
+            </p>
+        </div>
+
+        <section class="caixa" aria-labelledby="titulo-ajuda">
+            <h2 id="titulo-ajuda">Atendimento por e-mail</h2>
+            <p>
+                Você também pode enviar seu pedido para
+                <a id="contato" href="mailto:slipseend@gmail.com">
+                    slipseend@gmail.com
+                </a>.
+            </p>
+            <p class="nota">
+                Informe o e-mail da compra e se deseja solicitar reembolso.
+                Não envie senha nem dados completos do cartão.
+            </p>
+        </section>
+
+        <noscript>
+            <p class="caixa">
+                Para usar o formulário, habilite o JavaScript no navegador.
+                Você também pode solicitar atendimento pelo e-mail acima.
+            </p>
+        </noscript>
+    </main>
+
+    <footer>
+        <a href="/cancelamento/">← Voltar às informações de cancelamento</a>
+    </footer>
+</div>
+
+<script>
+(() => {
+    "use strict";
+
+    const API =
+        "https://servidorboletosautomacao-production.up.railway.app" +
+        "/api/cancelamentos/solicitar";
+
+    const CHAVE = "slipseend.cancelamento.solicitacao.v1";
+    const UUID = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+    const formulario = document.getElementById("formulario");
+    const campos = document.getElementById("campos");
+    const email = document.getElementById("email");
+    const enviar = document.getElementById("enviar");
+    const mensagem = document.getElementById("mensagem");
+    const resultado = document.getElementById("resultado");
+    const espera = document.getElementById("espera");
+    const contato = document.getElementById("contato");
+
+    let ocupado = false;
+    let estado = vazio();
+
+    function vazio() {
+        return {
+            pedido: null,
+            recibo: null,
+            aguardarAte: 0
+        };
+    }
+
+    function guardar() {
+        try {
+            sessionStorage.setItem(CHAVE, JSON.stringify(estado));
+        } catch {
+            // A repetição continua disponível enquanto a página estiver aberta.
+        }
+    }
+
+    function restaurar() {
+        try {
+            const salvo = JSON.parse(sessionStorage.getItem(CHAVE));
+            const pedido = salvo?.pedido;
+
+            if (
+                !pedido ||
+                typeof pedido.emailCompra !== "string" ||
+                pedido.emailCompra.length > 180 ||
+                typeof pedido.reembolsoSolicitado !== "boolean" ||
+                typeof pedido.tentativaId !== "string" ||
+                !UUID.test(pedido.tentativaId)
+            ) {
+                return;
+            }
+
+            estado.pedido = {
+                emailCompra: pedido.emailCompra,
+                reembolsoSolicitado: pedido.reembolsoSolicitado,
+                tentativaId: pedido.tentativaId
+            };
+
+            if (
+                typeof salvo.aguardarAte === "number" &&
+                Number.isFinite(salvo.aguardarAte)
+            ) {
+                estado.aguardarAte = Math.min(
+                    salvo.aguardarAte,
+                    Date.now() + 3600000
+                );
+            }
+
+            if (reciboValido(salvo.recibo)) {
+                estado.recibo = {
+                    protocolo: salvo.recibo.protocolo,
+                    dataSolicitacao: salvo.recibo.dataSolicitacao
+                };
+            }
+        } catch {
+            estado = vazio();
+        }
+    }
+
+    function reciboValido(valor) {
+        return (
+            valor &&
+            typeof valor.protocolo === "string" &&
+            UUID.test(valor.protocolo) &&
+            typeof valor.dataSolicitacao === "string" &&
+            Number.isFinite(Date.parse(valor.dataSolicitacao))
+        );
+    }
+
+    function avisar(texto, tipo = "erro") {
+        mensagem.textContent = texto;
+        mensagem.dataset.tipo = tipo;
+    }
+
+    function atualizar() {
+        const restante = Math.max(
+            0,
+            Math.ceil((estado.aguardarAte - Date.now()) / 1000)
+        );
+
+        formulario.hidden = Boolean(estado.recibo);
+        resultado.hidden = !estado.recibo;
+        campos.disabled = ocupado || Boolean(estado.pedido);
+        enviar.disabled = ocupado || restante > 0 || Boolean(estado.recibo);
+
+        enviar.textContent = ocupado
+            ? "Enviando..."
+            : estado.pedido
+                ? "Tentar novamente"
+                : "Enviar solicitação";
+
+        espera.textContent = restante > 0
+            ? `Você poderá tentar novamente em ${restante} segundos.`
+            : "";
+
+        document.getElementById("referencia-caixa").hidden =
+            !estado.pedido || Boolean(estado.recibo);
+
+        if (estado.pedido) {
+            email.value = estado.pedido.emailCompra;
+            formulario.elements.tipo.value =
+                estado.pedido.reembolsoSolicitado ? "sim" : "nao";
+
+            document.getElementById("referencia").textContent =
+                estado.pedido.tentativaId;
+        }
+
+        if (estado.recibo) {
+            document.getElementById("protocolo").textContent =
+                estado.recibo.protocolo;
+
+            document.getElementById("data").textContent =
+                new Intl.DateTimeFormat("pt-BR", {
+                    dateStyle: "short",
+                    timeStyle: "short",
+                    timeZone: "America/Sao_Paulo"
+                }).format(new Date(estado.recibo.dataSolicitacao));
+        }
+
+        const referencia =
+            estado.recibo?.protocolo || estado.pedido?.tentativaId;
+
+        const corpo = referencia
+            ? `Olá, preciso de atendimento sobre meu pedido.\n\nReferência: ${referencia}`
+            : "Olá, quero solicitar cancelamento.\n\nE-mail da compra:\nTambém desejo solicitar reembolso?";
+
+        contato.href =
+            "mailto:slipseend@gmail.com" +
+            "?subject=" + encodeURIComponent("Cancelamento SlipSeend") +
+            "&body=" + encodeURIComponent(corpo);
+    }
+
+    formulario.addEventListener("submit", async (evento) => {
+        evento.preventDefault();
+
+        if (
+            ocupado ||
+            estado.recibo ||
+            Date.now() < estado.aguardarAte
+        ) {
+            return;
+        }
+
+        if (!estado.pedido) {
+            if (!formulario.reportValidity()) return;
+
+            const tipo = formulario.elements.tipo.value;
+            if (tipo !== "sim" && tipo !== "nao") return;
+
+            if (!globalThis.crypto?.randomUUID) {
+                avisar(
+                    "Não foi possível iniciar o formulário neste navegador. " +
+                    "Envie seu pedido para slipseend@gmail.com."
+                );
+                return;
+            }
+
+            estado.pedido = {
+                emailCompra: email.value.trim().toLowerCase(),
+                reembolsoSolicitado: tipo === "sim",
+                tentativaId: crypto.randomUUID()
+            };
+
+            guardar();
+        }
+
+        ocupado = true;
+        avisar("Enviando sua solicitação...", "info");
+        atualizar();
+
+        const controle = new AbortController();
+        const limite = setTimeout(() => controle.abort(), 20000);
+
+        try {
+            const resposta = await fetch(API, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                },
+                credentials: "omit",
+                cache: "no-store",
+                redirect: "error",
+                referrerPolicy: "no-referrer",
+                signal: controle.signal,
+                body: JSON.stringify(estado.pedido)
+            });
+
+            const dados = await resposta.json().catch(() => null);
+
+            if (
+                resposta.status === 202 &&
+                dados?.ok === true &&
+                reciboValido(dados)
+            ) {
+                estado.recibo = {
+                    protocolo: dados.protocolo,
+                    dataSolicitacao: dados.dataSolicitacao
+                };
+                estado.aguardarAte = 0;
+                guardar();
+
+                avisar(
+                    "Recebimento confirmado. Guarde o protocolo abaixo.",
+                    "sucesso"
+                );
+            } else if (
+                resposta.status === 429 &&
+                dados?.codigo === "LIMITE_DE_SOLICITACOES"
+            ) {
+                const informado = Number(dados.aguardarSegundos);
+                const segundos = Number.isFinite(informado)
+                    ? Math.max(1, Math.min(3600, Math.ceil(informado)))
+                    : 60;
+
+                estado.aguardarAte = Date.now() + segundos * 1000;
+                guardar();
+
+                avisar(
+                    "Aguarde o prazo indicado para tentar novamente. " +
+                    "Você também pode solicitar atendimento por e-mail."
+                );
+            } else if (
+                resposta.status === 400 &&
+                dados?.codigo === "DADOS_INVALIDOS"
+            ) {
+                estado = vazio();
+                guardar();
+
+                avisar(
+                    "Confira o e-mail e a opção escolhida antes de enviar novamente."
+                );
+            } else if (
+                resposta.status === 503 &&
+                dados?.codigo === "ATENDIMENTO_POR_EMAIL"
+            ) {
+                avisar(
+                    "O formulário está temporariamente indisponível. " +
+                    "Envie seu pedido para slipseend@gmail.com."
+                );
+            } else {
+                avisar(
+                    "Não foi possível confirmar o recebimento. " +
+                    "Seu pedido pode já estar registrado. " +
+                    "Use “Tentar novamente” para verificar o mesmo pedido " +
+                    "ou fale com nosso atendimento."
+                );
+            }
+        } catch {
+            avisar(
+                "A conexão não permitiu confirmar o recebimento. " +
+                "Seu pedido pode já estar registrado. " +
+                "Use “Tentar novamente” ou envie a referência ao atendimento."
+            );
+        } finally {
+            clearTimeout(limite);
+            ocupado = false;
+            atualizar();
+
+            if (estado.recibo) resultado.focus();
+        }
+    });
+
+    document.getElementById("novo").addEventListener("click", () => {
+        estado = vazio();
+        guardar();
+        formulario.reset();
+        mensagem.textContent = "";
+        atualizar();
+        email.focus();
+    });
+
+    restaurar();
+
+    if (estado.pedido && !estado.recibo) {
+        avisar(
+            "Há uma solicitação iniciada nesta aba. " +
+            "Use “Tentar novamente” para confirmar o recebimento do mesmo pedido.",
+            "info"
+        );
+    }
+
+    atualizar();
+
+    setInterval(() => {
+        if (!ocupado && !estado.recibo && estado.aguardarAte > 0) {
+            atualizar();
+        }
+    }, 1000);
+})();
+</script>
+</body>
+</html>
