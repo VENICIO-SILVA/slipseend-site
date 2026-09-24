@@ -13,9 +13,10 @@ function atualizarPrecos() {
         preco.append(periodo);
         card.querySelector('.preco-legenda').textContent = anual
             ? `Pagamento anual. Economia de R$${plano.economia} por ano. Franquia renovada a cada mês.`
-            : 'Preço previsto para o lançamento';
-        card.querySelector('a').href = `/checkout-teste/?plano=${plano.id}&ciclo=${anual ? 'anual' : 'mensal'}`;
+            : 'Pagamento mensal';
+        card.querySelector('a').href = `/checkout/?plano=${plano.id}&ciclo=${anual ? 'anual' : 'mensal'}`;
     });
 }
 document.querySelectorAll('input[name="ciclo"]').forEach(input => input.addEventListener('change', atualizarPrecos));
 atualizarPrecos();
+
