@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Escolha seu plano SlipSeend e comece com sete dias grátis. Confira o valor e a frequência da cobrança antes de contratar.">
+    <title>Assinatura SlipSeend — 7 dias grátis</title>
+    <style>
+        :root { color-scheme: dark; --fundo: #08090b; --card: #111318; --borda: #292d33; --texto: #fff; --secundario: #b8bec7; --vermelho: #e50914; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 26px; background: var(--fundo); color: var(--texto); font: 16px/1.6 Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+        main { width: 100%; max-width: 580px; padding: 36px; border: 1px solid var(--borda); border-radius: 22px; background: var(--card); }
+        .marca { display: flex; align-items: center; gap: 11px; margin-bottom: 28px; font-size: 25px; font-weight: 800; }
+        .icone { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 11px; background: linear-gradient(135deg, #ff2836, #a9000b); font-size: 18px; }
+        .badge { display: inline-block; padding: 5px 10px; margin-bottom: 16px; border-radius: 999px; background: #2a1417; color: #ff7a82; font-size: 12px; font-weight: 800; text-transform: uppercase; }
+        h1 { margin-bottom: 16px; font-size: clamp(30px, 7vw, 38px); line-height: 1.15; letter-spacing: -1px; }
+        .descricao { color: var(--secundario); margin-bottom: 24px; }
+        fieldset { min-width: 0; border: 0; }
+        .resumo { padding: 18px; margin-bottom: 24px; border: 1px solid var(--borda); border-radius: 12px; }
+        label { display: block; margin-bottom: 7px; font-size: 14px; font-weight: 700; }
+        select, input:not([type="checkbox"]) { width: 100%; min-height: 50px; padding: 12px; border: 1px solid var(--borda); border-radius: 9px; background: #090b0e; color: var(--texto); font: inherit; }
+        select { margin-bottom: 16px; }
+        .campo { margin-bottom: 18px; }
+        .preco { margin: 8px 0; font-size: 20px; font-weight: 800; }
+        .detalhe, .aviso { color: var(--secundario); font-size: 14px; }
+        .detalhe { margin-top: 10px; }
+        .consentimento { display: flex; align-items: flex-start; gap: 10px; margin: 22px 0; font-weight: 400; line-height: 1.6; }
+        .consentimento input { flex: none; width: 18px; height: 18px; margin-top: 4px; accent-color: var(--vermelho); }
+        button { width: 100%; min-height: 56px; padding: 14px; border: 0; border-radius: 10px; background: var(--vermelho); color: #fff; font: inherit; font-weight: 800; cursor: pointer; }
+        button:hover { background: #ff1f2d; }
+        button:disabled { opacity: .6; cursor: not-allowed; }
+        #mensagem:empty { display: none; }
+        #mensagem { margin: 18px 0; padding: 14px; border-radius: 10px; overflow-wrap: anywhere; }
+        #mensagem.erro { background: #351417; color: #ffb3b8; }
+        #mensagem.sucesso { background: #0b3027; color: #9ce5cd; }
+        .rodape { margin-top: 24px; }
+        .voltar { display: block; margin-top: 24px; color: var(--secundario); text-align: center; text-decoration: none; }
+        :focus-visible { outline: 2px solid #ff7a82; outline-offset: 3px; }
+        [hidden] { display: none !important; }
+        @media (max-width: 600px) { body { padding: 14px; } main { padding: 26px 20px; } }
+    </style>
+</head>
+<body>
+<main>
+    <div class="marca"><span class="icone" aria-hidden="true">S</span><span>SlipSeend</span></div>
+    <span class="badge">7 dias grátis</span>
+    <h1>Comece a usar o SlipSeend.</h1>
+    <p class="descricao">Escolha seu plano e informe seus dados. Você concluirá a contratação com cartão de crédito no checkout do Asaas.</p>
+
+    <form id="formCheckout" method="post" action="/checkout/">
+        <fieldset id="camposCheckout" disabled>
+            <section class="resumo" aria-label="Resumo da assinatura">
+                <label for="plano">Plano</label>
+                <select id="plano" name="plano" required>
+                    <option value="essencial">Essencial — 150 boletos por mês</option>
+                    <option value="premium">Premium — 500 boletos por mês</option>
+                </select>
+                <label for="ciclo">Frequência da cobrança</label>
+                <select id="ciclo" name="ciclo" required>
+                    <option value="mensal">Mensal</option>
+                    <option value="anual">Anual</option>
+                </select>
+                <p id="precoPlano" class="preco" aria-live="polite">Selecione seu plano.</p>
+                <p id="detalhePlano" class="detalhe"></p>
+                <p class="detalhe">A primeira cobrança da assinatura está prevista para depois dos sete dias grátis. Depois disso, a cobrança será recorrente no ciclo escolhido, até o cancelamento. Cancele antes da primeira cobrança se não quiser continuar.</p>
+            </section>
+            <div class="campo"><label for="nome">Nome completo</label><input id="nome" name="nome" type="text" autocomplete="name" minlength="3" maxlength="120" required></div>
+            <div class="campo"><label for="cpfCnpj">CPF ou CNPJ</label><input id="cpfCnpj" name="cpfCnpj" type="text" inputmode="numeric" autocomplete="off" maxlength="18" required></div>
+            <div class="campo"><label for="email">E-mail para receber a licença</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div>
+            <label class="consentimento" for="consentimento"><input id="consentimento" type="checkbox" required><span>Concordo com a assinatura recorrente do plano <strong id="planoConsentido"></strong>. Após os sete dias grátis, autorizo a cobrança de <strong id="valorConsentido"></strong>, até o cancelamento.</span></label>
+            <button id="botaoComprar" type="submit">Continuar para o Asaas</button>
+        </fieldset>
+    </form>
+    <div id="mensagem" role="status" aria-live="polite"></div>
+    <noscript><p class="aviso">Ative o JavaScript do navegador para conferir o plano e continuar.</p></noscript>
+    <p class="aviso rodape">A licença de teste será enviada ao e-mail informado após a confirmação da contratação pelo Asaas. A franquia de boletos é mensal, inclusive no plano anual.</p>
+    <a class="voltar" href="/#planos">← Voltar aos planos</a>
+</main>
+<script>
+(() => {
+    'use strict';
+    const API = 'https://servidorboletosautomacao-production.up.railway.app/api/checkout/assinatura';
+    const catalogo = {
+        essencial: { nome: 'Essencial', limite: 150, mensal: 4990, anual: 49900 },
+        premium: { nome: 'Premium', limite: 500, mensal: 11990, anual: 119900 }
+    };
+    const form = document.getElementById('formCheckout');
+    const campos = document.getElementById('camposCheckout');
+    const botao = document.getElementById('botaoComprar');
+    const mensagem = document.getElementById('mensagem');
+    const plano = document.getElementById('plano');
+    const ciclo = document.getElementById('ciclo');
+    const consentimento = document.getElementById('consentimento');
+    const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+    const parametros = new URLSearchParams(location.search);
+    let enviando = false;
+    let bloqueado = false;
+
+    if (Object.hasOwn(catalogo, parametros.get('plano'))) plano.value = parametros.get('plano');
+    if (parametros.get('ciclo') === 'anual') ciclo.value = 'anual';
+
+    function mostrarMensagem(texto, tipo = 'erro') {
+        mensagem.className = tipo;
+        mensagem.textContent = texto;
+    }
+
+    function atualizarResumo() {
+        const escolhido = catalogo[plano.value];
+        const frequencia = ciclo.value === 'anual' ? 'por ano' : 'por mês';
+        const valor = moeda.format(escolhido[ciclo.value] / 100);
+        document.getElementById('precoPlano').textContent = `Após 7 dias grátis: ${valor} ${frequencia}`;
+        document.getElementById('detalhePlano').textContent = ciclo.value === 'anual'
+            ? `Cobrança uma vez por ano. Sua franquia é de ${escolhido.limite} boletos por mês e é renovada mensalmente.`
+            : `Cobrança mensal. Sua franquia é de ${escolhido.limite} boletos por mês.`;
+        document.getElementById('planoConsentido').textContent = escolhido.nome;
+        document.getElementById('valorConsentido').textContent = `${valor} ${frequencia}`;
+        consentimento.checked = false;
+        const endereco = new URL(location.href);
+        endereco.searchParams.set('plano', plano.value);
+        endereco.searchParams.set('ciclo', ciclo.value);
+        history.replaceState(null, '', endereco);
+    }
+
+    function interromper(texto, permitirCorrecao = false) {
+        bloqueado = !permitirCorrecao;
+        campos.disabled = bloqueado;
+        botao.textContent = permitirCorrecao ? 'Continuar para o Asaas' : 'Confira a mensagem abaixo';
+        mostrarMensagem(texto);
+    }
+
+    function validarEnderecoCheckout(valor) {
+        if (typeof valor !== 'string') throw new Error('Endereco ausente');
+        const endereco = new URL(valor);
+        const hostPermitido = ['asaas.com', 'www.asaas.com'].includes(endereco.hostname);
+        const caminhoComId = /^\/checkoutSession\/show\/[a-zA-Z0-9_-]+\/?$/.test(endereco.pathname);
+        const caminhoComParametro = /^\/checkoutSession\/show\/?$/.test(endereco.pathname)
+            && /^[a-zA-Z0-9_-]+$/.test(endereco.searchParams.get('id') || '');
+        if (endereco.protocol !== 'https:' || !hostPermitido || endereco.port
+                || endereco.username || endereco.password || !(caminhoComId || caminhoComParametro)) {
+            throw new Error('Endereco nao confirmado');
+        }
+        return endereco.href;
+    }
+
+    plano.addEventListener('change', atualizarResumo);
+    ciclo.addEventListener('change', atualizarResumo);
+    atualizarResumo();
+
+    const retorno = parametros.get('assinatura');
+    if (retorno === 'sucesso') {
+        form.hidden = true;
+        bloqueado = true;
+        mostrarMensagem('Você voltou do checkout. Aguarde a confirmação da contratação pelo Asaas e confira seu e-mail para receber a licença. Não é necessário iniciar outra assinatura.', 'sucesso');
+    } else if (retorno === 'cancelada' || retorno === 'expirada') {
+        bloqueado = true;
+        botao.textContent = 'Confira o pedido antes de continuar';
+        mostrarMensagem('O checkout foi interrompido ou expirou. Confira se a contratação chegou a ser concluída antes de abrir outro pedido. Sair do checkout não cancela uma assinatura já contratada.');
+    }
+
+    form.addEventListener('submit', async event => {
+        event.preventDefault();
+        if (enviando || bloqueado || !form.reportValidity()) return;
+
+        const selecionado = {
+            plano: plano.value,
+            ciclo: ciclo.value,
+            cicloApi: ciclo.value === 'anual' ? 'YEARLY' : 'MONTHLY',
+            valorCentavos: catalogo[plano.value][ciclo.value],
+            limite: catalogo[plano.value].limite
+        };
+        const nome = document.getElementById('nome').value.trim().replace(/\s+/g, ' ');
+        const cpfCnpj = document.getElementById('cpfCnpj').value.replace(/\D/g, '');
+        const email = document.getElementById('email').value.trim();
+        if (nome.length < 3 || ![11, 14].includes(cpfCnpj.length)) {
+            mostrarMensagem('Confira seu nome e informe um CPF de 11 dígitos ou CNPJ de 14 dígitos.');
+            return;
+        }
+
+        enviando = true;
+        campos.disabled = true;
+        botao.textContent = 'Preparando checkout…';
+        mostrarMensagem('Aguarde a confirmação do pedido.', 'sucesso');
+        const controlador = new AbortController();
+        const temporizador = setTimeout(() => controlador.abort(), 30000);
+        try {
+            const resposta = await fetch(API, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ nome, cpfCnpj, email,
+                    plano: selecionado.plano.toUpperCase(), ciclo: selecionado.cicloApi }),
+                signal: controlador.signal
+            });
+            const dados = await resposta.json().catch(() => ({}));
+            if (!resposta.ok || dados.ok !== true) {
+                if (resposta.status === 400) {
+                    interromper(typeof dados.mensagem === 'string' ? dados.mensagem
+                        : 'Confira nome, CPF/CNPJ, e-mail e plano antes de continuar.', true);
+                } else if (resposta.status === 503) {
+                    interromper('O checkout está temporariamente indisponível. Aguarde a liberação para continuar.');
+                } else {
+                    interromper('Não foi possível confirmar a criação do pedido. Confira se já existe uma assinatura ou pedido pendente antes de tentar novamente.');
+                }
+                return;
+            }
+
+            const valor = Number(dados.valor);
+            const confere = Number.isFinite(valor)
+                && Math.round(valor * 100) === selecionado.valorCentavos
+                && String(dados.plano).toLowerCase() === selecionado.plano
+                && Number(dados.limiteMensal) === selecionado.limite
+                && dados.ciclo === selecionado.cicloApi
+                && dados.cicloSolicitado === selecionado.cicloApi
+                && dados.modoTeste === false
+                && Number(dados.testeGratisDias) === 7
+                && dados.recorrente === true;
+            if (!confere) {
+                interromper('O pedido foi recebido, mas o plano, valor, ciclo ou prazo retornado não corresponde ao escolhido. Não conclua a contratação nem crie outro pedido; solicite a conferência desta tentativa.');
+                return;
+            }
+
+            let destino;
+            try {
+                destino = validarEnderecoCheckout(dados.checkoutUrl);
+            } catch (erro) {
+                interromper('O endereço do checkout não pôde ser confirmado. Confira o pedido antes de tentar novamente.');
+                return;
+            }
+            bloqueado = true;
+            mostrarMensagem('Plano e valor conferidos. Abrindo o checkout do Asaas…', 'sucesso');
+            botao.textContent = 'Abrindo Asaas…';
+            location.assign(destino);
+        } catch (erro) {
+            interromper('A resposta do pedido não foi confirmada. Confira se ele foi criado antes de tentar novamente, para evitar pedidos repetidos.');
+        } finally {
+            clearTimeout(temporizador);
+            enviando = false;
+        }
+    });
+
+    campos.disabled = bloqueado;
+})();
+</script>
+</body>
+</html>
