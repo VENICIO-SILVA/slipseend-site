@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Escolha seu plano SlipSeend e comece com sete dias grátis. Confira o valor e a frequência da cobrança antes de contratar.">
-    <title>Assinatura SlipSeend — 7 dias grátis</title>
+    <meta name="description" content="Escolha seu plano SlipSeend. Pague por Pix, cartão de crédito ou débito. Confira o valor e a frequência da cobrança antes de contratar.">
+    <title>Assinatura SlipSeend — Pix, crédito e débito</title>
     <style>
         :root { color-scheme: dark; --fundo: #08090b; --card: #111318; --borda: #292d33; --texto: #fff; --secundario: #b8bec7; --vermelho: #e50914; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -43,9 +43,9 @@
 <body>
 <main>
     <div class="marca"><span class="icone" aria-hidden="true">S</span><span>SlipSeend</span></div>
-    <span class="badge">7 dias grátis</span>
+    <span class="badge">Pix · Crédito · Débito</span>
     <h1>Comece a usar o SlipSeend.</h1>
-    <p class="descricao">Escolha seu plano e informe seus dados. Você concluirá a contratação com cartão de crédito no checkout do Asaas.</p>
+    <p class="descricao">Escolha seu plano e informe seus dados. Você escolherá Pix, cartão de crédito ou débito na fatura segura do Asaas. A primeira cobrança é na contratação; o acesso é liberado após a confirmação do pagamento.</p>
 
     <form id="formCheckout" method="post" action="/checkout/">
         <fieldset id="camposCheckout" disabled>
@@ -62,23 +62,30 @@
                 </select>
                 <p id="precoPlano" class="preco" aria-live="polite">Selecione seu plano.</p>
                 <p id="detalhePlano" class="detalhe"></p>
-                <p class="detalhe">A primeira cobrança da assinatura está prevista para depois dos sete dias grátis. Depois disso, a cobrança será recorrente no ciclo escolhido, até o cancelamento. Cancele antes da primeira cobrança se não quiser continuar.</p>
+                <p class="detalhe">No crédito, as próximas cobranças são automáticas. No Pix e no débito, você paga a fatura a cada renovação. Pode solicitar reembolso em até sete dias da contratação pelo nosso atendimento. <a href="/cancelamento/">Veja como cancelar e pedir reembolso.</a></p>
             </section>
             <div class="campo"><label for="nome">Nome completo</label><input id="nome" name="nome" type="text" autocomplete="name" minlength="3" maxlength="120" required></div>
             <div class="campo"><label for="cpfCnpj">CPF ou CNPJ</label><input id="cpfCnpj" name="cpfCnpj" type="text" inputmode="numeric" autocomplete="off" maxlength="18" required></div>
             <div class="campo"><label for="email">E-mail para receber a licença</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div>
-            <label class="consentimento" for="consentimento"><input id="consentimento" type="checkbox" required><span>Concordo com a assinatura recorrente do plano <strong id="planoConsentido"></strong>. Após os sete dias grátis, autorizo a cobrança de <strong id="valorConsentido"></strong>, até o cancelamento.</span></label>
+            <label class="consentimento" for="consentimento"><input id="consentimento" type="checkbox" required><span>Concordo com a assinatura recorrente do plano <strong id="planoConsentido"></strong>. Entendo que a primeira cobrança é agora, no valor de <strong id="valorConsentido"></strong>. No crédito, autorizo as próximas cobranças automáticas no ciclo escolhido até o cancelamento. No Pix ou débito, farei o pagamento de cada renovação.</span></label>
             <button id="botaoComprar" type="submit">Continuar para o Asaas</button>
         </fieldset>
     </form>
     <div id="mensagem" role="status" aria-live="polite"></div>
     <noscript><p class="aviso">Ative o JavaScript do navegador para conferir o plano e continuar.</p></noscript>
-    <p class="aviso rodape">A licença de teste será enviada ao e-mail informado após a confirmação da contratação pelo Asaas. A franquia de boletos é mensal, inclusive no plano anual.</p>
+    <p class="aviso rodape">A licença será enviada ao e-mail informado após a confirmação do pagamento pelo Asaas. A franquia de boletos é mensal, inclusive no plano anual.</p>
+    <a class="voltar" href="/cancelamento/">Cancelamento e reembolso · slipseend@gmail.com</a>
     <a class="voltar" href="/#planos">← Voltar aos planos</a>
 </main>
 <script>
 (() => {
     'use strict';
+    const OFERTA = 'pagamento-imediato-v1';
+    let tentativaId;
+    try {
+        tentativaId = sessionStorage.getItem('slipseendTentativa') || crypto.randomUUID();
+        sessionStorage.setItem('slipseendTentativa', tentativaId);
+    } catch (_) { tentativaId = crypto.randomUUID(); }
     const API = 'https://servidorboletosautomacao-production.up.railway.app/api/checkout/assinatura';
     const catalogo = {
         essencial: { nome: 'Essencial', limite: 150, mensal: 4990, anual: 49900 },
@@ -108,7 +115,7 @@
         const escolhido = catalogo[plano.value];
         const frequencia = ciclo.value === 'anual' ? 'por ano' : 'por mês';
         const valor = moeda.format(escolhido[ciclo.value] / 100);
-        document.getElementById('precoPlano').textContent = `Após 7 dias grátis: ${valor} ${frequencia}`;
+        document.getElementById('precoPlano').textContent = `${valor} ${frequencia} — primeira cobrança agora`;
         document.getElementById('detalhePlano').textContent = ciclo.value === 'anual'
             ? `Cobrança uma vez por ano. Sua franquia é de ${escolhido.limite} boletos por mês e é renovada mensalmente.`
             : `Cobrança mensal. Sua franquia é de ${escolhido.limite} boletos por mês.`;
@@ -132,11 +139,9 @@
         if (typeof valor !== 'string') throw new Error('Endereco ausente');
         const endereco = new URL(valor);
         const hostPermitido = ['asaas.com', 'www.asaas.com'].includes(endereco.hostname);
-        const caminhoComId = /^\/checkoutSession\/show\/[a-zA-Z0-9_-]+\/?$/.test(endereco.pathname);
-        const caminhoComParametro = /^\/checkoutSession\/show\/?$/.test(endereco.pathname)
-            && /^[a-zA-Z0-9_-]+$/.test(endereco.searchParams.get('id') || '');
+        const caminhoComId = /^\/i\/[a-zA-Z0-9_-]+\/?$/.test(endereco.pathname);
         if (endereco.protocol !== 'https:' || !hostPermitido || endereco.port
-                || endereco.username || endereco.password || !(caminhoComId || caminhoComParametro)) {
+                || endereco.username || endereco.password || !caminhoComId) {
             throw new Error('Endereco nao confirmado');
         }
         return endereco.href;
@@ -150,7 +155,7 @@
     if (retorno === 'sucesso') {
         form.hidden = true;
         bloqueado = true;
-        mostrarMensagem('Você voltou do checkout. Aguarde a confirmação da contratação pelo Asaas e confira seu e-mail para receber a licença. Não é necessário iniciar outra assinatura.', 'sucesso');
+        mostrarMensagem('Você voltou do checkout. Aguarde a confirmação do pagamento pelo Asaas e confira seu e-mail para receber a licença. Não é necessário iniciar outra assinatura.', 'sucesso');
     } else if (retorno === 'cancelada' || retorno === 'expirada') {
         bloqueado = true;
         botao.textContent = 'Confira o pedido antes de continuar';
@@ -181,12 +186,12 @@
         botao.textContent = 'Preparando checkout…';
         mostrarMensagem('Aguarde a confirmação do pedido.', 'sucesso');
         const controlador = new AbortController();
-        const temporizador = setTimeout(() => controlador.abort(), 30000);
+        const temporizador = setTimeout(() => controlador.abort(), 90000);
         try {
             const resposta = await fetch(API, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nome, cpfCnpj, email,
+                body: JSON.stringify({ nome, cpfCnpj, email, tentativaId, oferta: OFERTA,
                     plano: selecionado.plano.toUpperCase(), ciclo: selecionado.cicloApi }),
                 signal: controlador.signal
             });
@@ -211,7 +216,8 @@
                 && dados.ciclo === selecionado.cicloApi
                 && dados.cicloSolicitado === selecionado.cicloApi
                 && dados.modoTeste === false
-                && Number(dados.testeGratisDias) === 7
+                && Number(dados.testeGratisDias) === 0
+                && dados.cobrancaImediata === true && dados.oferta === OFERTA
                 && dados.recorrente === true;
             if (!confere) {
                 interromper('O pedido foi recebido, mas o plano, valor, ciclo ou prazo retornado não corresponde ao escolhido. Não conclua a contratação nem crie outro pedido; solicite a conferência desta tentativa.');
@@ -237,7 +243,23 @@
         }
     });
 
-    campos.disabled = bloqueado;
+    async function conferirDisponibilidade() {
+        if (bloqueado) return;
+        mostrarMensagem('Conferindo disponibilidade…', 'sucesso');
+        try {
+            const resposta = await fetch(API.replace('/assinatura', '/configuracao'), { cache: 'no-store', signal: AbortSignal.timeout(15000) });
+            const dados = await resposta.json();
+            if (!resposta.ok || dados.disponivel !== true || dados.oferta !== OFERTA
+                    || dados.cobrancaImediata !== true || dados.testeGratisDias !== 0 || dados.modoTeste !== false) {
+                throw new Error('Oferta indisponivel');
+            }
+            campos.disabled = false;
+            mensagem.textContent = '';
+        } catch (_) {
+            interromper('Estamos atualizando as formas de pagamento. Aguarde a liberação ou fale com slipseend@gmail.com.');
+        }
+    }
+    conferirDisponibilidade();
 })();
 </script>
 </body>
