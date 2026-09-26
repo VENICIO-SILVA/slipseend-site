@@ -67,6 +67,7 @@
             <div class="campo"><label for="nome">Nome completo</label><input id="nome" name="nome" type="text" autocomplete="name" minlength="3" maxlength="120" required></div>
             <div class="campo"><label for="cpfCnpj">CPF ou CNPJ</label><input id="cpfCnpj" name="cpfCnpj" type="text" inputmode="numeric" autocomplete="off" maxlength="18" required></div>
             <div class="campo"><label for="email">E-mail para receber a licença</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div>
+            <div class="campo"><label for="celular">Celular (WhatsApp)</label><input id="celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(00) 00000-0000" maxlength="15" required></div>
             <label class="consentimento" for="consentimento"><input id="consentimento" type="checkbox" required><span>Concordo com a assinatura recorrente do plano <strong id="planoConsentido"></strong>. Entendo que a primeira cobrança é agora, no valor de <strong id="valorConsentido"></strong>. No crédito, autorizo as próximas cobranças automáticas no ciclo escolhido até o cancelamento. No Pix ou débito, farei o pagamento de cada renovação.</span></label>
             <button id="botaoComprar" type="submit">Continuar para o Asaas</button>
         </fieldset>
@@ -75,6 +76,7 @@
     <noscript><p class="aviso">Ative o JavaScript do navegador para conferir o plano e continuar.</p></noscript>
     <p class="aviso rodape">A licença será enviada ao e-mail informado após a confirmação do pagamento pelo Asaas. A franquia de boletos é mensal, inclusive no plano anual.</p>
     <a class="voltar" href="/cancelamento/">Cancelamento e reembolso · slipseend@gmail.com</a>
+    <a class="voltar" href="https://wa.me/5582991116690" target="_blank" rel="noopener">Suporte no WhatsApp · (82) 99111-6690</a>
     <a class="voltar" href="/#planos">← Voltar aos planos</a>
 </main>
 <script>
@@ -98,6 +100,7 @@
     const plano = document.getElementById('plano');
     const ciclo = document.getElementById('ciclo');
     const consentimento = document.getElementById('consentimento');
+    const celular = document.getElementById('celular');
     const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
     const parametros = new URLSearchParams(location.search);
     let enviando = false;
@@ -147,6 +150,21 @@
         return endereco.href;
     }
 
+    // Mascara (00) 00000-0000 enquanto a pessoa digita.
+    function formatarCelular(valor) {
+        let digitos = valor.replace(/\D/g, '');
+        // Numero colado com o codigo do pais (+55).
+        if (digitos.length > 11 && digitos.startsWith('55')) digitos = digitos.slice(2);
+        digitos = digitos.slice(0, 11);
+        if (digitos.length <= 2) return digitos.length ? `(${digitos}` : '';
+        if (digitos.length <= 7) return `(${digitos.slice(0, 2)}) ${digitos.slice(2)}`;
+        return `(${digitos.slice(0, 2)}) ${digitos.slice(2, 7)}-${digitos.slice(7)}`;
+    }
+
+    celular.addEventListener('input', () => {
+        celular.value = formatarCelular(celular.value);
+    });
+
     plano.addEventListener('change', atualizarResumo);
     ciclo.addEventListener('change', atualizarResumo);
     atualizarResumo();
@@ -176,8 +194,15 @@
         const nome = document.getElementById('nome').value.trim().replace(/\s+/g, ' ');
         const cpfCnpj = document.getElementById('cpfCnpj').value.replace(/\D/g, '');
         const email = document.getElementById('email').value.trim();
+        const numeroCelular = celular.value.replace(/\D/g, '');
         if (nome.length < 3 || ![11, 14].includes(cpfCnpj.length)) {
             mostrarMensagem('Confira seu nome e informe um CPF de 11 dígitos ou CNPJ de 14 dígitos.');
+            return;
+        }
+        // DDD sem zero + nove digitos comecando por 9 (mesma regra do servidor).
+        if (!/^[1-9]{2}9\d{8}$/.test(numeroCelular)) {
+            mostrarMensagem('Informe seu celular com DDD, por exemplo (82) 99999-9999.');
+            celular.focus();
             return;
         }
 
@@ -191,7 +216,7 @@
             const resposta = await fetch(API, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ nome, cpfCnpj, email, tentativaId, oferta: OFERTA,
+                body: JSON.stringify({ nome, cpfCnpj, email, celular: numeroCelular, tentativaId, oferta: OFERTA,
                     plano: selecionado.plano.toUpperCase(), ciclo: selecionado.cicloApi }),
                 signal: controlador.signal
             });
@@ -199,7 +224,7 @@
             if (!resposta.ok || dados.ok !== true) {
                 if (resposta.status === 400) {
                     interromper(typeof dados.mensagem === 'string' ? dados.mensagem
-                        : 'Confira nome, CPF/CNPJ, e-mail e plano antes de continuar.', true);
+                        : 'Confira nome, CPF/CNPJ, e-mail, celular e plano antes de continuar.', true);
                 } else if (resposta.status === 503) {
                     interromper('O checkout está temporariamente indisponível. Aguarde a liberação para continuar.');
                 } else {
@@ -256,7 +281,7 @@
             campos.disabled = false;
             mensagem.textContent = '';
         } catch (_) {
-            interromper('Estamos atualizando as formas de pagamento. Aguarde a liberação ou fale com slipseend@gmail.com.');
+            interromper('Estamos atualizando as formas de pagamento. Aguarde a liberação ou fale com slipseend@gmail.com ou pelo WhatsApp (82) 99111-6690.');
         }
     }
     conferirDisponibilidade();
