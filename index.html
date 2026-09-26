@@ -849,27 +849,15 @@
         .demo-tela { position:relative; overflow:hidden; border:1px solid #3a3034; border-radius:20px; background:#000; aspect-ratio:16/9; }
         .demo [hidden] { display:none; }
         .demo-fluxo { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin:24px 0 0; padding-left:24px; color:#cbd0d7; font-size:14px; }
-        /* Tutoriais em video: player a esquerda, lista a direita (embaixo no celular). */
-        #tutoriais { scroll-margin-top:100px; }
-        .tutoriais { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px; align-items:start; }
+        /* Video de apresentacao (player em youtube.js). Tutoriais ficam em /comecar/. */
+        #apresentacao { scroll-margin-top:100px; }
+        .hero-detalhe a { color:#ff8e97; }
         .player-capa { position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; background:#000; cursor:pointer; }
         .player-capa img { width:100%; height:100%; object-fit:cover; opacity:.85; transition:opacity .2s; }
         .player-capa:hover img, .player-capa:focus-visible img { opacity:1; }
         .player-play { position:absolute; top:50%; left:50%; width:74px; height:74px; margin:-37px 0 0 -37px; display:grid; place-items:center; border-radius:50%; background:var(--vermelho); color:#fff; font-size:28px; box-shadow:0 10px 30px rgba(0,0,0,.45); }
         .demo-tela iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
-        .player-aviso { height:100%; display:grid; place-items:center; padding:24px; color:#b8bec7; text-align:center; }
-        .lista-tutoriais { list-style:none; margin:0; padding:0; display:grid; gap:12px; }
-        .item-tutorial { width:100%; display:grid; grid-template-columns:34px minmax(0,1fr); gap:12px; align-items:start; padding:14px; border:1px solid #2c3036; border-radius:14px; background:#111318; color:#fff; font:inherit; text-align:left; cursor:pointer; }
-        .item-tutorial:hover { border-color:#5a3a3f; }
-        .item-tutorial[aria-current="true"] { border-color:var(--vermelho); background:#1b1215; }
-        .item-tutorial:disabled { cursor:default; opacity:.65; }
-        .item-numero { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:#2a1417; color:#ff8e97; font-weight:800; }
-        .item-tutorial[aria-current="true"] .item-numero { background:var(--vermelho); color:#fff; }
-        .item-titulo { display:block; font-weight:750; line-height:1.35; }
-        .item-descricao { display:block; margin-top:4px; color:#b8bec7; font-size:13px; line-height:1.5; }
-        .item-breve { display:inline-block; margin-top:8px; padding:2px 8px; border-radius:999px; background:#2b2f36; color:#cbd0d7; font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
         .demo button:focus-visible { outline:3px solid #ff5962; outline-offset:4px; }
-        @media(max-width:900px) { .tutoriais { grid-template-columns:1fr; } }
         @media(max-width:600px) { .demo-fluxo { grid-template-columns:repeat(2,1fr); } .player-play { width:60px; height:60px; margin:-30px 0 0 -30px; font-size:22px; } }
     .passo p { line-height:1.7; }
         #faq a { color:#ff8e97; text-decoration:underline; }
@@ -951,8 +939,8 @@
                 Benefícios
             </a>
 
-            <a href="#tutoriais">
-                Tutoriais
+            <a href="/comecar/">
+                Primeiros passos
             </a>
 
             <a href="#como-funciona">
@@ -1016,29 +1004,27 @@
 
 
                 <a
+                    id="botao-conhecer"
                     class="botao botao-secundario"
-                    href="#tutoriais"
+                    href="#como-funciona"
                 >
-                    Ver tutoriais em vídeo
+                    Conhecer o programa
                 </a>
 
             </div>
 
 
             <div class="hero-detalhe">
-                Disponível para Windows • Ativação por licença
+                Disponível para Windows • Ativação por licença •
+                <a href="/comecar/">Já é cliente? Primeiros passos</a>
             </div>
 
         </div>
-        <div class="demo" id="demonstracao" aria-labelledby="titulo-demo">
-            <div class="secao-legenda" id="tutoriais">Tutoriais em vídeo</div>
-            <h2 id="titulo-demo">Aprenda a usar o SlipSeend passo a passo.</h2>
-            <!-- Os videos ficam no YouTube; a lista esta em demonstracao.js. -->
-            <div class="tutoriais">
-                <div class="demo-tela" id="player-tutorial"></div>
-                <ol class="lista-tutoriais" id="lista-tutoriais" aria-label="Lista de tutoriais"></ol>
-            </div>
-            <noscript><p><a href="https://youtu.be/7a42r4zZyjw">Assistir ao tutorial 1 no YouTube</a></p></noscript>
+        <!-- Video de apresentacao: aparece quando o ID for colocado em demonstracao.js. -->
+        <div class="demo" id="demonstracao" aria-labelledby="titulo-demo" hidden>
+            <div class="secao-legenda" id="apresentacao">Conheça o SlipSeend</div>
+            <h2 id="titulo-demo">O que é o SlipSeend e para quem ele é.</h2>
+            <div class="demo-tela" id="player-apresentacao"></div>
             <ol class="demo-fluxo"><li>Importe o PDF</li><li>Gere os boletos</li><li>Envie pelo WhatsApp</li><li>Acompanhe os resultados</li></ol>
         </div>
     </div>
@@ -1415,6 +1401,10 @@
                 Download
             </a>
 
+            <a href="/comecar/">
+                Primeiros passos
+            </a>
+
             <a href="mailto:slipseend@gmail.com">
                 Suporte
             </a>
@@ -1431,6 +1421,7 @@
 
 
 <script src="/planos.js" defer></script>
+<script src="/youtube.js" defer></script>
 <script src="/demonstracao.js" defer></script>
 </body>
 </html>

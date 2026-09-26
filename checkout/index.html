@@ -73,7 +73,7 @@
         </fieldset>
     </form>
     <div id="mensagem" role="status" aria-live="polite"></div>
-    <a id="linkTutorial" class="voltar" href="/#tutorial-1" hidden>▶ Enquanto aguarda o e-mail, veja como ativar sua licença</a>
+    <a id="linkTutorial" class="voltar" href="/comecar/?assinatura=sucesso" hidden>▶ Ir para os primeiros passos: download, ativação e tutoriais</a>
     <noscript><p class="aviso">Ative o JavaScript do navegador para conferir o plano e continuar.</p></noscript>
     <p class="aviso rodape">A licença será enviada ao e-mail informado após a confirmação do pagamento pelo Asaas. A franquia de boletos é mensal, inclusive no plano anual.</p>
     <a class="voltar" href="/cancelamento/">Cancelamento e reembolso · slipseend@gmail.com</a>
@@ -176,6 +176,8 @@
         bloqueado = true;
         mostrarMensagem('Você voltou do checkout. Aguarde a confirmação do pagamento pelo Asaas e confira seu e-mail para receber a licença. Não é necessário iniciar outra assinatura.', 'sucesso');
         document.getElementById('linkTutorial').hidden = false;
+        // Leva direto aos primeiros passos (download, ativacao e tutoriais).
+        location.replace('/comecar/?assinatura=sucesso');
     } else if (retorno === 'cancelada' || retorno === 'expirada') {
         bloqueado = true;
         botao.textContent = 'Confira o pedido antes de continuar';
