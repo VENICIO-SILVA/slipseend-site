@@ -846,15 +846,31 @@
 
         .demo { position:relative; margin-top:48px; max-width:1000px; scroll-margin-top:100px; }
         .demo h2 { font-size:clamp(24px,3vw,34px); margin:10px 0 24px; letter-spacing:-.7px; }
-        .demo-tela { overflow:hidden; border:1px solid #3a3034; border-radius:20px; background:#111318; aspect-ratio:16/9; }
-        .demo video { width:100%; height:100%; object-fit:contain; background:#000; }
+        .demo-tela { position:relative; overflow:hidden; border:1px solid #3a3034; border-radius:20px; background:#000; aspect-ratio:16/9; }
         .demo [hidden] { display:none; }
-        .demo-espera { height:100%; display:flex; flex-direction:column; justify-content:center; align-items:center; padding:24px; text-align:center; background:radial-gradient(ellipse at top right,#46161e,transparent 70%); }
-        .demo-selo { font-size:12px; letter-spacing:2px; color:#ff8e97; }
-        .demo-chamada { font-size:clamp(22px,3.5vw,42px); font-weight:800; line-height:1.2; margin:20px 0; }
-        #demo-status { color:#b8bec7; font-size:14px; }
         .demo-fluxo { display:grid; grid-template-columns:repeat(4,1fr); gap:22px; margin:24px 0 0; padding-left:24px; color:#cbd0d7; font-size:14px; }
-        @media(max-width:600px) { .demo-tela { aspect-ratio:4/3; } .demo-fluxo { grid-template-columns:repeat(2,1fr); } .demo-selo { font-size:10px; letter-spacing:1px; } }
+        /* Tutoriais em video: player a esquerda, lista a direita (embaixo no celular). */
+        #tutoriais { scroll-margin-top:100px; }
+        .tutoriais { display:grid; grid-template-columns:minmax(0,1fr) 300px; gap:20px; align-items:start; }
+        .player-capa { position:absolute; inset:0; width:100%; height:100%; padding:0; border:0; background:#000; cursor:pointer; }
+        .player-capa img { width:100%; height:100%; object-fit:cover; opacity:.85; transition:opacity .2s; }
+        .player-capa:hover img, .player-capa:focus-visible img { opacity:1; }
+        .player-play { position:absolute; top:50%; left:50%; width:74px; height:74px; margin:-37px 0 0 -37px; display:grid; place-items:center; border-radius:50%; background:var(--vermelho); color:#fff; font-size:28px; box-shadow:0 10px 30px rgba(0,0,0,.45); }
+        .demo-tela iframe { position:absolute; inset:0; width:100%; height:100%; border:0; }
+        .player-aviso { height:100%; display:grid; place-items:center; padding:24px; color:#b8bec7; text-align:center; }
+        .lista-tutoriais { list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+        .item-tutorial { width:100%; display:grid; grid-template-columns:34px minmax(0,1fr); gap:12px; align-items:start; padding:14px; border:1px solid #2c3036; border-radius:14px; background:#111318; color:#fff; font:inherit; text-align:left; cursor:pointer; }
+        .item-tutorial:hover { border-color:#5a3a3f; }
+        .item-tutorial[aria-current="true"] { border-color:var(--vermelho); background:#1b1215; }
+        .item-tutorial:disabled { cursor:default; opacity:.65; }
+        .item-numero { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; background:#2a1417; color:#ff8e97; font-weight:800; }
+        .item-tutorial[aria-current="true"] .item-numero { background:var(--vermelho); color:#fff; }
+        .item-titulo { display:block; font-weight:750; line-height:1.35; }
+        .item-descricao { display:block; margin-top:4px; color:#b8bec7; font-size:13px; line-height:1.5; }
+        .item-breve { display:inline-block; margin-top:8px; padding:2px 8px; border-radius:999px; background:#2b2f36; color:#cbd0d7; font-size:11px; font-weight:800; letter-spacing:.5px; text-transform:uppercase; }
+        .demo button:focus-visible { outline:3px solid #ff5962; outline-offset:4px; }
+        @media(max-width:900px) { .tutoriais { grid-template-columns:1fr; } }
+        @media(max-width:600px) { .demo-fluxo { grid-template-columns:repeat(2,1fr); } .player-play { width:60px; height:60px; margin:-30px 0 0 -30px; font-size:22px; } }
     .passo p { line-height:1.7; }
         #faq a { color:#ff8e97; text-decoration:underline; }
             .tutorial-print { margin:24px 0 0; }
@@ -935,6 +951,10 @@
                 Benefícios
             </a>
 
+            <a href="#tutoriais">
+                Tutoriais
+            </a>
+
             <a href="#como-funciona">
                 Como funciona
             </a>
@@ -997,9 +1017,9 @@
 
                 <a
                     class="botao botao-secundario"
-                    href="#demonstracao"
+                    href="#tutoriais"
                 >
-                    Conhecer o programa
+                    Ver tutoriais em vídeo
                 </a>
 
             </div>
@@ -1011,16 +1031,14 @@
 
         </div>
         <div class="demo" id="demonstracao" aria-labelledby="titulo-demo">
-            <div class="secao-legenda">Conheça o SlipSeend</div>
-            <h2 id="titulo-demo">Veja como sua rotina pode funcionar.</h2>
-            <div class="demo-tela">
-                <video id="video-demo" controls playsinline preload="metadata" hidden aria-label="Demonstração do SlipSeend"></video>
-                <div id="demo-espera" class="demo-espera">
-                    <span class="demo-selo">DO PDF AO ACOMPANHAMENTO</span>
-                    <p class="demo-chamada">Menos etapas manuais.<br>Mais organização no mês.</p>
-                    <p id="demo-status" role="status">Vídeo de demonstração em breve.</p>
-                </div>
+            <div class="secao-legenda" id="tutoriais">Tutoriais em vídeo</div>
+            <h2 id="titulo-demo">Aprenda a usar o SlipSeend passo a passo.</h2>
+            <!-- Os videos ficam no YouTube; a lista esta em demonstracao.js. -->
+            <div class="tutoriais">
+                <div class="demo-tela" id="player-tutorial"></div>
+                <ol class="lista-tutoriais" id="lista-tutoriais" aria-label="Lista de tutoriais"></ol>
             </div>
+            <noscript><p><a href="https://youtu.be/7a42r4zZyjw">Assistir ao tutorial 1 no YouTube</a></p></noscript>
             <ol class="demo-fluxo"><li>Importe o PDF</li><li>Gere os boletos</li><li>Envie pelo WhatsApp</li><li>Acompanhe os resultados</li></ol>
         </div>
     </div>
