@@ -35,6 +35,13 @@
         #mensagem.sucesso { background: #0b3027; color: #9ce5cd; }
         .rodape { margin-top: 24px; }
         .voltar { display: block; margin-top: 24px; color: var(--secundario); text-align: center; text-decoration: none; }
+        .cupom-linha { display: flex; gap: 10px; }
+        .cupom-linha input { flex: 1; min-width: 0; text-transform: uppercase; }
+        .botao-secundario { flex: none; width: auto; min-height: 50px; padding: 12px 18px; border: 1px solid var(--borda); background: #1d2127; }
+        .botao-secundario:hover { background: #262b33; }
+        #cupomStatus:empty { display: none; }
+        #cupomStatus.ok { color: #9ce5cd; }
+        #cupomStatus.erro { color: #ffb3b8; }
         :focus-visible { outline: 2px solid #ff7a82; outline-offset: 3px; }
         [hidden] { display: none !important; }
         @media (max-width: 600px) { body { padding: 14px; } main { padding: 26px 20px; } }
@@ -68,6 +75,14 @@
             <div class="campo"><label for="cpfCnpj">CPF ou CNPJ</label><input id="cpfCnpj" name="cpfCnpj" type="text" inputmode="numeric" autocomplete="off" maxlength="18" required></div>
             <div class="campo"><label for="email">E-mail para receber a licença</label><input id="email" name="email" type="email" autocomplete="email" maxlength="160" required></div>
             <div class="campo"><label for="celular">Celular (WhatsApp)</label><input id="celular" name="celular" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(00) 00000-0000" maxlength="15" required></div>
+            <div class="campo">
+                <label for="cupom">Cupom de desconto (opcional)</label>
+                <div class="cupom-linha">
+                    <input id="cupom" name="cupom" type="text" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="30" placeholder="Ex.: MARIA10">
+                    <button id="aplicarCupom" class="botao-secundario" type="button">Aplicar</button>
+                </div>
+                <p id="cupomStatus" class="detalhe" aria-live="polite"></p>
+            </div>
             <label class="consentimento" for="consentimento"><input id="consentimento" type="checkbox" required><span>Concordo com a assinatura recorrente do plano <strong id="planoConsentido"></strong>. Entendo que a primeira cobrança é agora, no valor de <strong id="valorConsentido"></strong>. No crédito, autorizo as próximas cobranças automáticas no ciclo escolhido até o cancelamento. No Pix ou débito, farei o pagamento de cada renovação.</span></label>
             <button id="botaoComprar" type="submit">Continuar para o Asaas</button>
         </fieldset>
@@ -89,7 +104,11 @@
         tentativaId = sessionStorage.getItem('slipseendTentativa') || crypto.randomUUID();
         sessionStorage.setItem('slipseendTentativa', tentativaId);
     } catch (_) { tentativaId = crypto.randomUUID(); }
-    const API = 'https://servidorboletosautomacao-production.up.railway.app/api/checkout/assinatura';
+    // Teste local (servidor no IntelliJ + Asaas sandbox): so vale com a pagina aberta em localhost.
+    const LOCAL = ['localhost', '127.0.0.1'].includes(location.hostname);
+    const API = LOCAL
+        ? 'http://localhost:8081/api/checkout/assinatura'
+        : 'https://servidorboletosautomacao-production.up.railway.app/api/checkout/assinatura';
     const catalogo = {
         essencial: { nome: 'Essencial', limite: 150, mensal: 4990, anual: 49900 },
         premium: { nome: 'Premium', limite: 500, mensal: 11990, anual: 119900 }
@@ -102,29 +121,57 @@
     const ciclo = document.getElementById('ciclo');
     const consentimento = document.getElementById('consentimento');
     const celular = document.getElementById('celular');
+    const cupomCampo = document.getElementById('cupom');
+    const cupomBotao = document.getElementById('aplicarCupom');
+    const cupomStatus = document.getElementById('cupomStatus');
     const moeda = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
     const parametros = new URLSearchParams(location.search);
     let enviando = false;
     let bloqueado = false;
+    // Cupom conferido pelo servidor para o plano e a frequencia escolhidos.
+    let cupomAplicado = null;
+    let consultaCupom = 0;
 
     if (Object.hasOwn(catalogo, parametros.get('plano'))) plano.value = parametros.get('plano');
     if (parametros.get('ciclo') === 'anual') ciclo.value = 'anual';
+    // Link do vendedor: /checkout/?cupom=MARIA10
+    if (parametros.get('cupom')) cupomCampo.value = normalizarCupom(parametros.get('cupom')).slice(0, 30);
 
     function mostrarMensagem(texto, tipo = 'erro') {
         mensagem.className = tipo;
         mensagem.textContent = texto;
     }
 
+    function normalizarCupom(valor) {
+        return String(valor).replace(/\s+/g, '').toUpperCase();
+    }
+
+    function mostrarStatusCupom(texto, tipo = '') {
+        cupomStatus.className = `detalhe ${tipo}`.trim();
+        cupomStatus.textContent = texto;
+    }
+
+    function cupomValeParaSelecao() {
+        return cupomAplicado !== null && cupomAplicado.plano === plano.value && cupomAplicado.ciclo === ciclo.value;
+    }
+
     function atualizarResumo() {
         const escolhido = catalogo[plano.value];
         const frequencia = ciclo.value === 'anual' ? 'por ano' : 'por mês';
         const valor = moeda.format(escolhido[ciclo.value] / 100);
-        document.getElementById('precoPlano').textContent = `${valor} ${frequencia} — primeira cobrança agora`;
+        if (cupomValeParaSelecao()) {
+            const primeira = moeda.format(cupomAplicado.primeiraCentavos / 100);
+            document.getElementById('precoPlano').textContent = `${primeira} na primeira cobrança — depois ${valor} ${frequencia}`;
+            document.getElementById('valorConsentido').textContent =
+                `${primeira} (com o cupom ${cupomAplicado.codigo}); as próximas, ${valor} ${frequencia}`;
+        } else {
+            document.getElementById('precoPlano').textContent = `${valor} ${frequencia} — primeira cobrança agora`;
+            document.getElementById('valorConsentido').textContent = `${valor} ${frequencia}`;
+        }
         document.getElementById('detalhePlano').textContent = ciclo.value === 'anual'
             ? `Cobrança uma vez por ano. Sua franquia é de ${escolhido.limite} boletos por mês e é renovada mensalmente.`
             : `Cobrança mensal. Sua franquia é de ${escolhido.limite} boletos por mês.`;
         document.getElementById('planoConsentido').textContent = escolhido.nome;
-        document.getElementById('valorConsentido').textContent = `${valor} ${frequencia}`;
         consentimento.checked = false;
         const endereco = new URL(location.href);
         endereco.searchParams.set('plano', plano.value);
@@ -142,7 +189,9 @@
     function validarEnderecoCheckout(valor) {
         if (typeof valor !== 'string') throw new Error('Endereco ausente');
         const endereco = new URL(valor);
-        const hostPermitido = ['asaas.com', 'www.asaas.com'].includes(endereco.hostname);
+        const hostPermitido = ['asaas.com', 'www.asaas.com']
+            .concat(LOCAL ? ['sandbox.asaas.com'] : [])
+            .includes(endereco.hostname);
         const caminhoComId = /^\/i\/[a-zA-Z0-9_-]+\/?$/.test(endereco.pathname);
         if (endereco.protocol !== 'https:' || !hostPermitido || endereco.port
                 || endereco.username || endereco.password || !caminhoComId) {
@@ -166,8 +215,81 @@
         celular.value = formatarCelular(celular.value);
     });
 
-    plano.addEventListener('change', atualizarResumo);
-    ciclo.addEventListener('change', atualizarResumo);
+    // Confere o cupom no servidor para o plano e a frequencia escolhidos.
+    async function aplicarCupom() {
+        const codigo = normalizarCupom(cupomCampo.value);
+        cupomAplicado = null;
+        atualizarResumo();
+        if (!codigo) {
+            mostrarStatusCupom('');
+            return;
+        }
+        if (!/^[A-Z0-9]{3,30}$/.test(codigo)) {
+            mostrarStatusCupom('Cupom inválido. Use só letras e números.', 'erro');
+            return;
+        }
+        const consulta = ++consultaCupom;
+        const selecao = { plano: plano.value, ciclo: ciclo.value };
+        mostrarStatusCupom('Conferindo cupom…');
+        try {
+            const resposta = await fetch(API.replace('/assinatura', '/cupom'), {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ cupom: codigo, plano: selecao.plano.toUpperCase(),
+                    ciclo: selecao.ciclo === 'anual' ? 'YEARLY' : 'MONTHLY' }),
+                cache: 'no-store',
+                signal: AbortSignal.timeout(15000)
+            });
+            const dados = await resposta.json().catch(() => ({}));
+            // Ignora respostas antigas (a pessoa mudou o plano ou o cupom no meio).
+            if (consulta !== consultaCupom || selecao.plano !== plano.value || selecao.ciclo !== ciclo.value) return;
+            if (resposta.status === 429) {
+                mostrarStatusCupom('Muitas tentativas. Aguarde um minuto e tente de novo.', 'erro');
+                return;
+            }
+            const cheio = catalogo[selecao.plano][selecao.ciclo];
+            const primeira = Math.round(Number(dados.valorPrimeiraCobranca) * 100);
+            const demais = Math.round(Number(dados.valorDemaisCobrancas) * 100);
+            if (!resposta.ok || dados.ok !== true) {
+                mostrarStatusCupom('Cupom inválido ou encerrado. Confira o código com quem indicou.', 'erro');
+                return;
+            }
+            if (dados.cupom !== codigo || demais !== cheio || !(primeira > 0 && primeira <= cheio)) {
+                mostrarStatusCupom('Não foi possível conferir o cupom. Tente de novo.', 'erro');
+                return;
+            }
+            cupomAplicado = { codigo, plano: selecao.plano, ciclo: selecao.ciclo, primeiraCentavos: primeira };
+            cupomCampo.value = codigo;
+            mostrarStatusCupom(`Cupom ${codigo} aplicado: ${Number(dados.percentualDesconto)}% de desconto na primeira cobrança.`, 'ok');
+            atualizarResumo();
+        } catch (_) {
+            if (consulta === consultaCupom) mostrarStatusCupom('Não foi possível conferir o cupom agora. Tente de novo.', 'erro');
+        }
+    }
+
+    function aoMudarSelecao() {
+        atualizarResumo();
+        // O desconto depende do plano: confere de novo para o novo preco.
+        if (normalizarCupom(cupomCampo.value)) aplicarCupom();
+    }
+
+    cupomBotao.addEventListener('click', aplicarCupom);
+    cupomCampo.addEventListener('keydown', event => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            aplicarCupom();
+        }
+    });
+    cupomCampo.addEventListener('input', () => {
+        if (cupomAplicado && normalizarCupom(cupomCampo.value) !== cupomAplicado.codigo) {
+            cupomAplicado = null;
+            mostrarStatusCupom('');
+            atualizarResumo();
+        }
+    });
+
+    plano.addEventListener('change', aoMudarSelecao);
+    ciclo.addEventListener('change', aoMudarSelecao);
     atualizarResumo();
 
     const retorno = parametros.get('assinatura');
@@ -187,6 +309,15 @@
     form.addEventListener('submit', async event => {
         event.preventDefault();
         if (enviando || bloqueado || !form.reportValidity()) return;
+
+        // Cupom digitado precisa estar conferido para o plano atual (o preco muda).
+        const cupomDigitado = normalizarCupom(cupomCampo.value);
+        if (cupomDigitado && !(cupomValeParaSelecao() && cupomAplicado.codigo === cupomDigitado)) {
+            mostrarMensagem('Clique em "Aplicar" para conferir o cupom ou apague o campo do cupom antes de continuar.');
+            cupomCampo.focus();
+            return;
+        }
+        const cupomEnviado = cupomDigitado ? { ...cupomAplicado } : null;
 
         const selecionado = {
             plano: plano.value,
@@ -221,12 +352,22 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome, cpfCnpj, email, celular: numeroCelular, tentativaId, oferta: OFERTA,
-                    plano: selecionado.plano.toUpperCase(), ciclo: selecionado.cicloApi }),
+                    plano: selecionado.plano.toUpperCase(), ciclo: selecionado.cicloApi,
+                    cupom: cupomEnviado ? cupomEnviado.codigo : undefined }),
                 signal: controlador.signal
             });
             const dados = await resposta.json().catch(() => ({}));
             if (!resposta.ok || dados.ok !== true) {
-                if (resposta.status === 400) {
+                if (resposta.status === 400 && dados.cupomInvalido === true) {
+                    cupomAplicado = null;
+                    atualizarResumo();
+                    // O servidor tambem recusa o cupom quando quem compra e o proprio vendedor.
+                    const doVendedor = typeof dados.mensagem === 'string' && dados.mensagem.includes('vendedor');
+                    mostrarStatusCupom(doVendedor ? dados.mensagem
+                        : 'Cupom inválido ou encerrado. Confira o código com quem indicou.', 'erro');
+                    interromper(doVendedor ? `${dados.mensagem} Apague o cupom para continuar sem desconto.`
+                        : 'Este cupom não vale mais. Apague o cupom ou confira o código e tente de novo.', true);
+                } else if (resposta.status === 400) {
                     interromper(typeof dados.mensagem === 'string' ? dados.mensagem
                         : 'Confira nome, CPF/CNPJ, e-mail, celular e plano antes de continuar.', true);
                 } else if (resposta.status === 503) {
@@ -247,7 +388,14 @@
                 && dados.modoTeste === false
                 && Number(dados.testeGratisDias) === 0
                 && dados.cobrancaImediata === true && dados.oferta === OFERTA
-                && dados.recorrente === true;
+                && dados.recorrente === true
+                // Com cupom, a primeira cobranca tem o valor com desconto conferido antes.
+                && (cupomEnviado
+                    ? dados.cupom === cupomEnviado.codigo
+                        && Math.round(Number(dados.valorPrimeiraCobranca) * 100) === cupomEnviado.primeiraCentavos
+                    : dados.cupom === undefined
+                        && (dados.valorPrimeiraCobranca === undefined
+                            || Math.round(Number(dados.valorPrimeiraCobranca) * 100) === selecionado.valorCentavos));
             if (!confere) {
                 interromper('O pedido foi recebido, mas o plano, valor, ciclo ou prazo retornado não corresponde ao escolhido. Não conclua a contratação nem crie outro pedido; solicite a conferência desta tentativa.');
                 return;
@@ -284,6 +432,8 @@
             }
             campos.disabled = false;
             mensagem.textContent = '';
+            // Cupom vindo do link do vendedor ja e conferido ao abrir a pagina.
+            if (normalizarCupom(cupomCampo.value)) aplicarCupom();
         } catch (_) {
             interromper('Estamos atualizando as formas de pagamento. Aguarde a liberação ou fale com slipseend@gmail.com ou pelo WhatsApp (82) 99111-6690.');
         }
