@@ -361,8 +361,12 @@
                 if (resposta.status === 400 && dados.cupomInvalido === true) {
                     cupomAplicado = null;
                     atualizarResumo();
-                    mostrarStatusCupom('Cupom inválido ou encerrado. Confira o código com quem indicou.', 'erro');
-                    interromper('Este cupom não vale mais. Apague o cupom ou confira o código e tente de novo.', true);
+                    // O servidor tambem recusa o cupom quando quem compra e o proprio vendedor.
+                    const doVendedor = typeof dados.mensagem === 'string' && dados.mensagem.includes('vendedor');
+                    mostrarStatusCupom(doVendedor ? dados.mensagem
+                        : 'Cupom inválido ou encerrado. Confira o código com quem indicou.', 'erro');
+                    interromper(doVendedor ? `${dados.mensagem} Apague o cupom para continuar sem desconto.`
+                        : 'Este cupom não vale mais. Apague o cupom ou confira o código e tente de novo.', true);
                 } else if (resposta.status === 400) {
                     interromper(typeof dados.mensagem === 'string' ? dados.mensagem
                         : 'Confira nome, CPF/CNPJ, e-mail, celular e plano antes de continuar.', true);
