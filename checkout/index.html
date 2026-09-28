@@ -42,6 +42,7 @@
         #cupomStatus:empty { display: none; }
         #cupomStatus.ok { color: #9ce5cd; }
         #cupomStatus.erro { color: #ffb3b8; }
+        .selo-robo { min-height: 65px; margin: 0 0 18px; }
         :focus-visible { outline: 2px solid #ff7a82; outline-offset: 3px; }
         [hidden] { display: none !important; }
         @media (max-width: 600px) { body { padding: 14px; } main { padding: 26px 20px; } }
@@ -84,6 +85,7 @@
                 <p id="cupomStatus" class="detalhe" aria-live="polite"></p>
             </div>
             <label class="consentimento" for="consentimento"><input id="consentimento" type="checkbox" required><span>Concordo com a assinatura recorrente do plano <strong id="planoConsentido"></strong>. Entendo que a primeira cobrança é agora, no valor de <strong id="valorConsentido"></strong>. No crédito, autorizo as próximas cobranças automáticas no ciclo escolhido até o cancelamento. No Pix ou débito, farei o pagamento de cada renovação.</span></label>
+            <div id="seloRobo" class="selo-robo"></div>
             <button id="botaoComprar" type="submit">Continuar para o Asaas</button>
         </fieldset>
     </form>
@@ -131,6 +133,23 @@
     // Cupom conferido pelo servidor para o plano e a frequencia escolhidos.
     let cupomAplicado = null;
     let consultaCupom = 0;
+    // Anti-robo (Cloudflare Turnstile): o token vai junto no pedido e vale uma vez so.
+    // Em localhost usa a chave de teste da Cloudflare, que sempre aprova.
+    const CHAVE_SELO_ROBO = LOCAL ? '1x00000000000000000000AA' : '0x4AAAAAAFHFQz-4VUpkWWJk';
+    let tokenRobo = '';
+    let seloRobo = null;
+    window.seloRoboCarregado = () => {
+        seloRobo = window.turnstile.render('#seloRobo', {
+            sitekey: CHAVE_SELO_ROBO,
+            language: 'pt-br',
+            callback: token => { tokenRobo = token; },
+            'expired-callback': () => { tokenRobo = ''; }
+        });
+    };
+    function reiniciarSeloRobo() {
+        tokenRobo = '';
+        if (seloRobo !== null && window.turnstile) window.turnstile.reset(seloRobo);
+    }
 
     if (Object.hasOwn(catalogo, parametros.get('plano'))) plano.value = parametros.get('plano');
     if (parametros.get('ciclo') === 'anual') ciclo.value = 'anual';
@@ -340,6 +359,11 @@
             celular.focus();
             return;
         }
+        if (!tokenRobo) {
+            mostrarMensagem('Aguarde a verificação de segurança logo acima do botão terminar e clique de novo. Se ela não aparecer, fale com o suporte no WhatsApp (82) 99111-6690.');
+            return;
+        }
+        const turnstileToken = tokenRobo;
 
         enviando = true;
         campos.disabled = true;
@@ -353,7 +377,7 @@
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome, cpfCnpj, email, celular: numeroCelular, tentativaId, oferta: OFERTA,
                     plano: selecionado.plano.toUpperCase(), ciclo: selecionado.cicloApi,
-                    cupom: cupomEnviado ? cupomEnviado.codigo : undefined }),
+                    cupom: cupomEnviado ? cupomEnviado.codigo : undefined, turnstileToken }),
                 signal: controlador.signal
             });
             const dados = await resposta.json().catch(() => ({}));
@@ -417,6 +441,8 @@
         } finally {
             clearTimeout(temporizador);
             enviando = false;
+            // O token ja foi usado no servidor: uma nova tentativa precisa de outro.
+            if (!bloqueado) reiniciarSeloRobo();
         }
     });
 
@@ -441,5 +467,6 @@
     conferirDisponibilidade();
 })();
 </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=seloRoboCarregado" async defer></script>
 </body>
 </html>
