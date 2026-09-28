@@ -7,7 +7,7 @@
     <meta name="referrer" content="no-referrer">
     <meta
         http-equiv="Content-Security-Policy"
-        content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline'; connect-src https://servidorboletosautomacao-production.up.railway.app; base-uri 'none'; form-action 'none'; object-src 'none'"
+        content="default-src 'none'; style-src 'unsafe-inline'; script-src 'unsafe-inline' https://challenges.cloudflare.com; frame-src https://challenges.cloudflare.com; connect-src https://servidorboletosautomacao-production.up.railway.app https://challenges.cloudflare.com; base-uri 'none'; form-action 'none'; object-src 'none'"
     >
 
     <title>Solicitar cancelamento — SlipSeend</title>
@@ -259,6 +259,8 @@
                 </p>
             </fieldset>
 
+            <div id="seloRobo" style="min-height: 65px; margin: 0 0 16px;"></div>
+
             <button id="enviar" type="submit" disabled>
                 Enviar solicitação
             </button>
@@ -367,6 +369,27 @@
 
     let ocupado = false;
     let estado = vazio();
+
+    // Anti-robo (Cloudflare Turnstile): o token vai junto no envio, vale uma vez
+    // so e nao e guardado. Em localhost usa a chave de teste, que sempre aprova.
+    const LOCAL = ["localhost", "127.0.0.1"].includes(location.hostname);
+    const CHAVE_SELO_ROBO = LOCAL ? "1x00000000000000000000AA" : "0x4AAAAAAFHFQz-4VUpkWWJk";
+    let tokenRobo = "";
+    let seloRobo = null;
+
+    window.seloRoboCarregado = () => {
+        seloRobo = window.turnstile.render("#seloRobo", {
+            sitekey: CHAVE_SELO_ROBO,
+            language: "pt-br",
+            callback: (token) => { tokenRobo = token; },
+            "expired-callback": () => { tokenRobo = ""; }
+        });
+    };
+
+    function reiniciarSeloRobo() {
+        tokenRobo = "";
+        if (seloRobo !== null && window.turnstile) window.turnstile.reset(seloRobo);
+    }
 
     function vazio() {
         return {
@@ -534,6 +557,16 @@
             guardar();
         }
 
+        if (!tokenRobo) {
+            avisar(
+                "Aguarde a verificação de segurança logo acima do botão " +
+                "terminar e clique de novo."
+            );
+            return;
+        }
+
+        const turnstileToken = tokenRobo;
+
         ocupado = true;
         avisar("Enviando sua solicitação...", "info");
         atualizar();
@@ -553,7 +586,7 @@
                 redirect: "error",
                 referrerPolicy: "no-referrer",
                 signal: controle.signal,
-                body: JSON.stringify(estado.pedido)
+                body: JSON.stringify({ ...estado.pedido, turnstileToken })
             });
 
             const dados = await resposta.json().catch(() => null);
@@ -601,6 +634,14 @@
                     "Confira o e-mail e a opção escolhida antes de enviar novamente."
                 );
             } else if (
+                resposta.status === 400 &&
+                dados?.codigo === "VERIFICACAO_HUMANA"
+            ) {
+                avisar(
+                    "A verificação de segurança não foi confirmada. " +
+                    "Aguarde o selo acima do botão e use “Tentar novamente”."
+                );
+            } else if (
                 resposta.status === 503 &&
                 dados?.codigo === "ATENDIMENTO_POR_EMAIL"
             ) {
@@ -627,7 +668,12 @@
             ocupado = false;
             atualizar();
 
-            if (estado.recibo) resultado.focus();
+            if (estado.recibo) {
+                resultado.focus();
+            } else {
+                // O token ja foi usado no servidor: nova tentativa precisa de outro.
+                reiniciarSeloRobo();
+            }
         }
     });
 
@@ -659,5 +705,6 @@
     }, 1000);
 })();
 </script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit&onload=seloRoboCarregado" async defer></script>
 </body>
 </html>
