@@ -10,7 +10,7 @@ const tutoriais = [
     {
         titulo: 'Como usar o SlipSeend',
         descricao: 'Importar o PDF, gerar os boletos e enviar pelo WhatsApp.',
-        youtubeId: ''
+        youtubeId: 'JrELiouy6jw'
     }
 ];
 
