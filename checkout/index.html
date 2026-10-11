@@ -62,7 +62,12 @@
                 <select id="plano" name="plano" required>
                     <option value="essencial">Essencial — 150 boletos por mês</option>
                     <option value="premium">Premium — 500 boletos por mês</option>
+                    <option value="personalizado">Personalizado — você escolhe de 10 a 500 boletos</option>
                 </select>
+                <div id="blocoBoletos" hidden>
+                    <label for="boletos">Boletos por mês: <strong id="boletosValor">50</strong></label>
+                    <input id="boletos" name="boletos" type="range" min="10" max="500" step="10" value="50" style="width:100%">
+                </div>
                 <label for="ciclo">Frequência da cobrança</label>
                 <select id="ciclo" name="ciclo" required>
                     <option value="mensal">Mensal</option>
@@ -112,14 +117,33 @@
         ? 'http://localhost:8081/api/checkout/assinatura'
         : 'https://servidorboletosautomacao-production.up.railway.app/api/checkout/assinatura';
     const catalogo = {
-        essencial: { nome: 'Essencial', limite: 150, mensal: 4990, anual: 49900 },
-        premium: { nome: 'Premium', limite: 500, mensal: 11990, anual: 119900 }
+        essencial: { nome: 'Essencial', limite: 150 },
+        premium: { nome: 'Premium', limite: 500 },
+        personalizado: { nome: 'Personalizado', limite: null }
     };
+    // Mesma regua do servidor (PlanoLicenca): 10 a 140 boletos = R$ 14,90 + R$ 0,25 por boleto;
+    // 150 a 500 = R$ 49,90 + R$ 0,20 por boleto acima de 150. Anual = 10x o mensal.
+    function mensalCentavos(limite) {
+        return limite < 150 ? 1490 + 25 * limite : 4990 + 20 * (limite - 150);
+    }
+    // Plano e precos da selecao atual; 150 e 500 no personalizado sao o Essencial e o Premium.
+    function planoEscolhido() {
+        let id = plano.value;
+        const limite = id === 'personalizado' ? Number(boletos.value) : catalogo[id].limite;
+        if (id === 'personalizado' && limite === 150) id = 'essencial';
+        if (id === 'personalizado' && limite === 500) id = 'premium';
+        const mensal = mensalCentavos(limite);
+        return {
+            id, limite, mensal, anual: mensal * 10,
+            nome: id === 'personalizado' ? `Personalizado (${limite} boletos por mês)` : catalogo[id].nome
+        };
+    }
     const form = document.getElementById('formCheckout');
     const campos = document.getElementById('camposCheckout');
     const botao = document.getElementById('botaoComprar');
     const mensagem = document.getElementById('mensagem');
     const plano = document.getElementById('plano');
+    const boletos = document.getElementById('boletos');
     const ciclo = document.getElementById('ciclo');
     const consentimento = document.getElementById('consentimento');
     const celular = document.getElementById('celular');
@@ -153,6 +177,9 @@
 
     if (Object.hasOwn(catalogo, parametros.get('plano'))) plano.value = parametros.get('plano');
     if (parametros.get('ciclo') === 'anual') ciclo.value = 'anual';
+    // Link do plano personalizado: /checkout/?plano=personalizado&boletos=50
+    const boletosNoLink = Number(parametros.get('boletos'));
+    if (boletosNoLink >= 10 && boletosNoLink <= 500 && boletosNoLink % 10 === 0) boletos.value = String(boletosNoLink);
     // Link do vendedor: /checkout/?cupom=MARIA10
     if (parametros.get('cupom')) cupomCampo.value = normalizarCupom(parametros.get('cupom')).slice(0, 30);
 
@@ -171,11 +198,15 @@
     }
 
     function cupomValeParaSelecao() {
-        return cupomAplicado !== null && cupomAplicado.plano === plano.value && cupomAplicado.ciclo === ciclo.value;
+        const escolhido = planoEscolhido();
+        return cupomAplicado !== null && cupomAplicado.plano === escolhido.id
+            && cupomAplicado.limite === escolhido.limite && cupomAplicado.ciclo === ciclo.value;
     }
 
     function atualizarResumo() {
-        const escolhido = catalogo[plano.value];
+        document.getElementById('blocoBoletos').hidden = plano.value !== 'personalizado';
+        document.getElementById('boletosValor').textContent = boletos.value;
+        const escolhido = planoEscolhido();
         const frequencia = ciclo.value === 'anual' ? 'por ano' : 'por mês';
         const valor = moeda.format(escolhido[ciclo.value] / 100);
         if (cupomValeParaSelecao()) {
@@ -194,6 +225,8 @@
         consentimento.checked = false;
         const endereco = new URL(location.href);
         endereco.searchParams.set('plano', plano.value);
+        if (plano.value === 'personalizado') endereco.searchParams.set('boletos', boletos.value);
+        else endereco.searchParams.delete('boletos');
         endereco.searchParams.set('ciclo', ciclo.value);
         history.replaceState(null, '', endereco);
     }
@@ -248,25 +281,28 @@
             return;
         }
         const consulta = ++consultaCupom;
-        const selecao = { plano: plano.value, ciclo: ciclo.value };
+        const atual = planoEscolhido();
+        const selecao = { plano: atual.id, limite: atual.limite, ciclo: ciclo.value };
         mostrarStatusCupom('Conferindo cupom…');
         try {
             const resposta = await fetch(API.replace('/assinatura', '/cupom'), {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ cupom: codigo, plano: selecao.plano.toUpperCase(),
+                body: JSON.stringify({ cupom: codigo, plano: selecao.plano.toUpperCase(), boletos: selecao.limite,
                     ciclo: selecao.ciclo === 'anual' ? 'YEARLY' : 'MONTHLY' }),
                 cache: 'no-store',
                 signal: AbortSignal.timeout(15000)
             });
             const dados = await resposta.json().catch(() => ({}));
             // Ignora respostas antigas (a pessoa mudou o plano ou o cupom no meio).
-            if (consulta !== consultaCupom || selecao.plano !== plano.value || selecao.ciclo !== ciclo.value) return;
+            const agora = planoEscolhido();
+            if (consulta !== consultaCupom || selecao.plano !== agora.id || selecao.limite !== agora.limite
+                    || selecao.ciclo !== ciclo.value) return;
             if (resposta.status === 429) {
                 mostrarStatusCupom('Muitas tentativas. Aguarde um minuto e tente de novo.', 'erro');
                 return;
             }
-            const cheio = catalogo[selecao.plano][selecao.ciclo];
+            const cheio = (selecao.ciclo === 'anual' ? 10 : 1) * mensalCentavos(selecao.limite);
             const primeira = Math.round(Number(dados.valorPrimeiraCobranca) * 100);
             const demais = Math.round(Number(dados.valorDemaisCobrancas) * 100);
             if (!resposta.ok || dados.ok !== true) {
@@ -277,7 +313,8 @@
                 mostrarStatusCupom('Não foi possível conferir o cupom. Tente de novo.', 'erro');
                 return;
             }
-            cupomAplicado = { codigo, plano: selecao.plano, ciclo: selecao.ciclo, primeiraCentavos: primeira };
+            cupomAplicado = { codigo, plano: selecao.plano, limite: selecao.limite, ciclo: selecao.ciclo,
+                primeiraCentavos: primeira };
             cupomCampo.value = codigo;
             mostrarStatusCupom(`Cupom ${codigo} aplicado: ${Number(dados.percentualDesconto)}% de desconto na primeira cobrança.`, 'ok');
             atualizarResumo();
@@ -309,6 +346,9 @@
 
     plano.addEventListener('change', aoMudarSelecao);
     ciclo.addEventListener('change', aoMudarSelecao);
+    // Enquanto arrasta so atualiza o preco; ao soltar confere o cupom de novo.
+    boletos.addEventListener('input', atualizarResumo);
+    boletos.addEventListener('change', aoMudarSelecao);
     atualizarResumo();
 
     const retorno = parametros.get('assinatura');
@@ -338,12 +378,13 @@
         }
         const cupomEnviado = cupomDigitado ? { ...cupomAplicado } : null;
 
+        const escolhido = planoEscolhido();
         const selecionado = {
-            plano: plano.value,
+            plano: escolhido.id,
             ciclo: ciclo.value,
             cicloApi: ciclo.value === 'anual' ? 'YEARLY' : 'MONTHLY',
-            valorCentavos: catalogo[plano.value][ciclo.value],
-            limite: catalogo[plano.value].limite
+            valorCentavos: escolhido[ciclo.value],
+            limite: escolhido.limite
         };
         const nome = document.getElementById('nome').value.trim().replace(/\s+/g, ' ');
         const cpfCnpj = document.getElementById('cpfCnpj').value.replace(/\D/g, '');
@@ -376,7 +417,7 @@
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ nome, cpfCnpj, email, celular: numeroCelular, tentativaId, oferta: OFERTA,
-                    plano: selecionado.plano.toUpperCase(), ciclo: selecionado.cicloApi,
+                    plano: selecionado.plano.toUpperCase(), boletos: selecionado.limite, ciclo: selecionado.cicloApi,
                     cupom: cupomEnviado ? cupomEnviado.codigo : undefined, turnstileToken }),
                 signal: controlador.signal
             });
