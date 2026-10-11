@@ -3,7 +3,7 @@ const planos = {
     premium: { mensal: '119,90', anual: '1.199,00', economia: '239,80' }
 };
 // Mesma regua do servidor (PlanoLicenca): 10 a 140 boletos = R$ 14,90 + R$ 0,25 por boleto;
-// 150 a 500 = R$ 49,90 + R$ 0,20 por boleto acima de 150. Anual = 10x o mensal.
+// 150 a 1000 = R$ 49,90 + R$ 0,20 por boleto acima de 150. Anual = 10x o mensal.
 function mensalCentavos(boletos) {
     return boletos < 150 ? 1490 + 25 * boletos : 4990 + 20 * (boletos - 150);
 }

@@ -62,11 +62,11 @@
                 <select id="plano" name="plano" required>
                     <option value="essencial">Essencial — 150 boletos por mês</option>
                     <option value="premium">Premium — 500 boletos por mês</option>
-                    <option value="personalizado">Personalizado — você escolhe de 10 a 500 boletos</option>
+                    <option value="personalizado">Personalizado — você escolhe de 10 a 1.000 boletos</option>
                 </select>
                 <div id="blocoBoletos" hidden>
                     <label for="boletos">Boletos por mês: <strong id="boletosValor">50</strong></label>
-                    <input id="boletos" name="boletos" type="range" min="10" max="500" step="10" value="50" style="width:100%">
+                    <input id="boletos" name="boletos" type="range" min="10" max="1000" step="10" value="50" style="width:100%">
                 </div>
                 <label for="ciclo">Frequência da cobrança</label>
                 <select id="ciclo" name="ciclo" required>
@@ -122,7 +122,7 @@
         personalizado: { nome: 'Personalizado', limite: null }
     };
     // Mesma regua do servidor (PlanoLicenca): 10 a 140 boletos = R$ 14,90 + R$ 0,25 por boleto;
-    // 150 a 500 = R$ 49,90 + R$ 0,20 por boleto acima de 150. Anual = 10x o mensal.
+    // 150 a 1000 = R$ 49,90 + R$ 0,20 por boleto acima de 150. Anual = 10x o mensal.
     function mensalCentavos(limite) {
         return limite < 150 ? 1490 + 25 * limite : 4990 + 20 * (limite - 150);
     }
@@ -179,7 +179,7 @@
     if (parametros.get('ciclo') === 'anual') ciclo.value = 'anual';
     // Link do plano personalizado: /checkout/?plano=personalizado&boletos=50
     const boletosNoLink = Number(parametros.get('boletos'));
-    if (boletosNoLink >= 10 && boletosNoLink <= 500 && boletosNoLink % 10 === 0) boletos.value = String(boletosNoLink);
+    if (boletosNoLink >= 10 && boletosNoLink <= 1000 &&boletosNoLink % 10 === 0) boletos.value = String(boletosNoLink);
     // Link do vendedor: /checkout/?cupom=MARIA10
     if (parametros.get('cupom')) cupomCampo.value = normalizarCupom(parametros.get('cupom')).slice(0, 30);
 
