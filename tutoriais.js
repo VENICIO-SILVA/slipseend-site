@@ -3,14 +3,19 @@
 // (sem o "?si=..."). Com youtubeId vazio, o item aparece como "Em breve".
 const tutoriais = [
     {
+        titulo: 'Como baixar e instalar',
+        descricao: 'Download do instalador oficial, instalação no Windows e primeira abertura.',
+        youtubeId: 'ORmM8J24y4E'
+    },
+    {
         titulo: 'Como comprar e ativar seu plano',
-        descricao: 'Escolha do plano, pagamento e ativação da licença no programa.',
-        youtubeId: '7a42r4zZyjw'
+        descricao: 'Escolha do plano, assinatura, chave por e-mail e ativação no programa.',
+        youtubeId: 'PWw-QcWeBlE'
     },
     {
         titulo: 'Como usar o SlipSeend',
-        descricao: 'Importar o PDF, gerar os boletos e enviar pelo WhatsApp.',
-        youtubeId: 'JrELiouy6jw'
+        descricao: 'Importar a lista do mês, gerar os boletos, enviar pelo WhatsApp e o que fazer se algo travar.',
+        youtubeId: 'nIjjAtWsGiA'
     }
 ];
 
